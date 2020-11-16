@@ -4,7 +4,7 @@
 
 	var page = window.location.pathname.split("/").pop().split(".").shift(); //Get html file name and use it for TableCode
 
-	var TableCode = "TU132"; //Table code TU131 / IA001
+	var TableCode = "IA001"; //Table code TU131 / IA001
 	Url = "https://andmed.stat.ee/api/v1/et/stat/"+ TableCode; //metadata url
 	Url_eng = "https://andmed.stat.ee/api/v1/en/stat/"+ TableCode;
 
