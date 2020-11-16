@@ -310,8 +310,8 @@ $.ajax({type: "POST", url: Url, data: PostQueryAll, dataType: "json",
  success: function(resp) {
 	processData(tableData, resp);	
  	table.appendRows(tableData);
-	chunkData(table, tableData);
-// 	doneCallback();
+//	chunkData(table, tableData);
+ 	doneCallback();
 	console.timeEnd("TimerAll");          
         } 
 });
