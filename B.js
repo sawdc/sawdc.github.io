@@ -305,7 +305,7 @@ var api_jj=apiPages[api_j];
 					processData(tableData, resp);
 					P=P+1;
 					window.P=P;
-console.log ("Cycle no ", P); console.timeLog("Timer");
+console.log ("Cycle no ", P); //console.timeLog("Timer");
 				}, 
 				function() {if (K==0 && P==apiPages.length) {    
 				table.appendRows(tableData);
