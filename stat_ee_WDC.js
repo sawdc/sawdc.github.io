@@ -169,7 +169,7 @@ function processData(tableData, resp) {
 		for (var d = 0; d < DimNo; d++) {
 		TablePush[Dim_id[d]] = resp.data[i].key[d];		
 		}		
-	if (resp.data[i].values[0] !== "." && resp.data[i].values[0] !== "..") {TablePush["obs"] = resp.data[i].values[0];};
+	if (resp.data[i].values[0] !== "." && resp.data[i].values[0] !== "..") {TablePush["obs"] = resp.data[i].values[0];}; //"." Data are confidential. ".." Data were not collected.
 	tableData.push(TablePush);
 	}
 };
