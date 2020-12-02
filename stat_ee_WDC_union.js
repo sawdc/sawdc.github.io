@@ -1,10 +1,15 @@
 (function() {
     // Create the connector object
     var myConnector = tableau.makeConnector();
-
-	var TableCode = window.location.pathname.split("/").pop().split(".").shift(); //Get html file name and use it for TableCode
+	var str=window.location.pathname.split("/").pop().split(".").shift(); //Get html file name
+	var UnionMembers = str.split('_'); //Get table codes
+	var TableCode = UnionMembers[0]; //Use first table code for metadata
 	Url = "https://andmed.stat.ee/api/v1/et/stat/"+ TableCode; //metadata url
 	Url_eng = "https://andmed.stat.ee/api/v1/en/stat/"+ TableCode;
+	var UrlUnion=[];
+for (var i = 1, len = UnionMembers.length; i < len; i++) {
+	UrlUnion.push("https://andmed.stat.ee/api/v1/et/stat/"+ UnionMembers[i]); //other union members' data urls
+	};
 
 
 var TableName,
