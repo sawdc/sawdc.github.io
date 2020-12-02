@@ -124,6 +124,11 @@ for (var d = 0; d < DimNo; d++) {
             alias: Dim_id[d],
             dataType: tableau.dataTypeEnum.string});
 	}
+	
+	cols_DataTable.push({id: "ind",
+            alias: "indicator",
+            dataType: tableau.dataTypeEnum.string});
+	
 	cols_DataTable.push({id: "obs",
             alias: "observation",
             dataType: tableau.dataTypeEnum.float});
@@ -167,14 +172,15 @@ var r=0; //Counter of rows retrieved
 function processData(tableData, resp) {
             // Iterate over the JSON object
 	for (var i = 0, len = resp.data.length; i < len; i++) {
-		r=r+1;
-		console.log (CellsNo, r);
-		window.r=r;
+//		r=r+1;
+//		console.log (CellsNo, r);
+//		window.r=r;
 		var TablePush = {};
 		for (var d = 0; d < DimNo; d++) {
 		TablePush[Dim_id[d]] = resp.data[i].key[d];		
 		}		
 	if (resp.data[i].values[0] !== "." && resp.data[i].values[0] !== "..") {TablePush["obs"] = resp.data[i].values[0];}; //"." Data are confidential. ".." Data were not collected.
+	TablePush["ind"] = UnionMembers[0];
 	tableData.push(TablePush);
 	}
 };
