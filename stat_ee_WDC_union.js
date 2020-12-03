@@ -308,7 +308,7 @@ for (var api_j = 0, len_j = UnionMembers.length; api_j < len_j; api_j++) {
 	var api_jj=UrlUnion[api_j]; 
 		fetchAll(api_jj, 1, 
 				function(resp) {
-					processData(tableData, resp, P+UnionMembers[P]);
+					processData(tableData, resp, UnionMembers[P]);
 					P=P+1;
 					window.P=P; 
 				}, 
