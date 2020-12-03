@@ -7,7 +7,7 @@
 	Url = "https://andmed.stat.ee/api/v1/et/stat/"+ TableCode; //metadata url
 	Url_eng = "https://andmed.stat.ee/api/v1/en/stat/"+ TableCode;
 	var UrlUnion=[];
-for (var i = 1, len = UnionMembers.length; i < len; i++) {
+for (var i = 0, len = UnionMembers.length; i < len; i++) {
 	UrlUnion.push("https://andmed.stat.ee/api/v1/et/stat/"+ UnionMembers[i]); //other union members' data urls
 	};
 
@@ -29,10 +29,10 @@ var TableName,
 	Dim_name_est=[],
 	Dim_name_eng=[];
 const MaxCells = 500000; //Max no of cells limit 1 000 000 per query. For better performance smaller amounts could be retrieved.
-
+	TableName = str;
 
 function callback_est(response) {
-	TableName = response.title;
+//	TableName = response.title;
 	MetaData_est =response;  //defining metadata
 	DimNo = response.variables.length;
 		for (var i = 0; i < DimNo; i++) {
@@ -169,7 +169,7 @@ myConnector.init = function(initCallback) {
 };
 
 var r=0; //Counter of rows retrieved
-function processData(tableData, resp) {
+function processData(tableData, resp, u) {
             // Iterate over the JSON object
 	for (var i = 0, len = resp.data.length; i < len; i++) {
 //		r=r+1;
@@ -180,7 +180,7 @@ function processData(tableData, resp) {
 		TablePush[Dim_id[d]] = resp.data[i].key[d];		
 		}		
 	if (resp.data[i].values[0] !== "." && resp.data[i].values[0] !== "..") {TablePush["obs"] = resp.data[i].values[0];}; //"." Data are confidential. ".." Data were not collected.
-	TablePush["ind"] = UnionMembers[0];
+	TablePush["ind"] = u;
 	tableData.push(TablePush);
 	}
 };
@@ -252,6 +252,25 @@ if (MetaData_est.variables[d].code == "Aasta") {
 
 var PostQueryAll=('{"query":'+JSON.stringify(QueryAll)+',"response":'+JSON.stringify({"format":"json"})+"}");
 
+// Function for getting all data for union members    
+	function fetchAll(UrlU, control, processCallback, finishedCallback) {//Define POST query for union (all)
+
+    	$.ajax({type: "POST", url: UrlU, data: PostQueryAll, dataType: "json", success: function(resp) {
+    		if (control ==1)
+    			{
+		    	processCallback(resp); 
+		    	fetchAll(UrlU, control + 1, processCallback, finishedCallback);
+			}
+			else
+			{
+		    	finishedCallback();
+			}
+	}
+	/*,
+    	error: function (jqXhr, textStatus, errorMessage) {console.log('Error' + errorMessage);}*/
+	});
+    };	
+	
 myConnector.getData = function(table, doneCallback) {
 var tableData = [];
 
@@ -282,17 +301,27 @@ if (table.tableInfo.id == Dim_id_est[d]) {
 }
 
  } else if (CellsNo<=MaxCells) {//In case of smaller tables get all data at once, else slice it by dimension with the highest number of values. Max no of cells limit 1 000 000 per query.
-//console.time("TimerAll"); //Start timer
-$.ajax({type: "POST", url: Url, data: PostQueryAll, dataType: "json",
- success: function(resp) {
-	processData(tableData, resp);	
- 	table.appendRows(tableData);
-//	chunkData(table, tableData);
- 	doneCallback();
-//	console.timeEnd("TimerAll");          
-        } 
-});
-} else {
+var K = 0;
+var P = 0;
+
+for (var api_j = 0, len_j = UnionMembers.length; api_j < len_j; api_j++) {
+	var api_jj=UrlUnion[api_j]; 
+		fetchAll(api_jj, 1, 
+				function(resp) {
+					processData(tableData, resp, P+UnionMembers[P]);
+					P=P+1;
+					window.P=P; 
+				}, 
+				function() {if (K==0 && P==len_j) { 
+				//	K=K+1;				    
+				table.appendRows(tableData);
+				doneCallback();
+				K=K+1;
+				console.log ("tsüklite arv:", P, "Dimensiooni pikkus ", CellsNo);
+				}
+		});
+}
+} else { //Doesn not work currently, gets only data for the first union member
 
 var K = 0; //control variable
 var P = 0; //Counter of number of cycles
