@@ -125,8 +125,8 @@ for (var d = 0; d < DimNo; d++) {
             dataType: tableau.dataTypeEnum.string});
 	}
 	
-	cols_DataTable.push({id: "ind",
-            alias: "indicator",
+	cols_DataTable.push({id: "tc",
+            alias: "TableCode",
             dataType: tableau.dataTypeEnum.string});
 	
 	cols_DataTable.push({id: "obs",
@@ -180,7 +180,7 @@ function processData(tableData, resp, u) {
 		TablePush[Dim_id[d]] = resp.data[i].key[d];		
 		}		
 	if (resp.data[i].values[0] !== "." && resp.data[i].values[0] !== "..") {TablePush["obs"] = resp.data[i].values[0];}; //"." Data are confidential. ".." Data were not collected.
-	TablePush["ind"] = u;
+	TablePush["tc"] = u;
 	tableData.push(TablePush);
 	}
 };
