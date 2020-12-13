@@ -77,9 +77,9 @@ $.ajax({
 		apiPages.push(MetaData_est.variables[Dim_max].values[i]);
 	};
 };
-		var Years =[]; // Helper table for years to pull in case StartYear <>"" and Aasta <> DimMax
+		var Years =[]; // Helper table for years to pull in case StartYear <>""
  for (var i = 0, len = MetaData_est.variables[DimAasta].values.length; i < len; i++) {
-	if (MetaData_est.variables[Dim_max].code !== "Aasta" && MetaData_est.variables[DimAasta].values[i] >= StartYear) {
+	if (MetaData_est.variables[DimAasta].values[i] >= StartYear) {
 		Years.push(MetaData_est.variables[DimAasta].values[i]);
 	};
 };
