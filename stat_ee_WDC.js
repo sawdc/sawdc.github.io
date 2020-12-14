@@ -214,8 +214,12 @@ var PostQuery=('{"query":'+JSON.stringify(Query)+',"response":'+JSON.stringify({
 		    	finishedCallback();
 			}
 	}
-	/*,
-    	error: function (jqXhr, textStatus, errorMessage) {console.log('Error' + errorMessage);}*/
+	,
+    	error: function(xhr, textStatus, errorThrown) {
+		if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]<StartYear) {
+			alert("Error "+xhr.status+" ("+errorThrown+"). Remove or decrease StartYear value in html file.");
+		} else {alert("Error "+xhr.status+" ("+errorThrown+").");}
+	}
 	});
     };
 
@@ -279,7 +283,12 @@ $.ajax({type: "POST", url: Url, data: PostQueryAll, dataType: "json",
 //	chunkData(table, tableData);
  	doneCallback();
 //	console.timeEnd("TimerAll");          
-        } 
+        },
+ error: function(xhr, textStatus, errorThrown) {
+	if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]<StartYear) {
+		alert("Error "+xhr.status+" ("+errorThrown+"). Remove or decrease StartYear value in html file.");
+	} else {alert("Error "+xhr.status+" ("+errorThrown+").");}
+ }
 });
 } else {
 
