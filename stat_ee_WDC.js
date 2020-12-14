@@ -46,6 +46,9 @@ if (MetaData_est.variables[i].code !== "Aasta") {
 	if (MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear};
 		};
 	}
+	if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]<StartYear) {
+		alert("StartYear in html file ("+StartYear+") is larger than last year in data table ("+MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]+")! Do not fetch DataTable, WDC will crash!");
+	};
 }
 
 $.ajax({
