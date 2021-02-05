@@ -17,7 +17,7 @@ var TableName,
 	Dim_id_eng=[],
 	cols=[],
 	DIM_Schema=[],
-//	StartYear=document.getElementById("Start").innerText, //Get StartYear from html file; Empty = all periods (years)
+	StartYear=document.getElementById("Start").innerText, //Get StartYear from html file; Empty = all periods (years)
 	Dim_max=0,
 	Dim_max_length=0,
 	Dim_max_value="",
