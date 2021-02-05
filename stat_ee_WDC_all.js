@@ -217,35 +217,35 @@ var PostQuery=('{"query":'+JSON.stringify(Query)+',"response":'+JSON.stringify({
 		    	finishedCallback();
 			}
 	}
-	,
+	/*,
     	error: function(xhr, textStatus, errorThrown) {
 		if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]<StartYear) {
 			alert("Error "+xhr.status+" ("+errorThrown+"). Remove or decrease StartYear value in html file.");
 		} else {alert("Error "+xhr.status+" ("+errorThrown+").");}
-	}
+	}*/
 	});
     };
 
 //Define POST query for getting all data at once
 	var QueryAll=[];
-/*	for (var d = 0; d < DimNo; d++) {
-if (MetaData_est.variables[d].code == "Aasta") {
+	for (var d = 0; d < DimNo; d++) {
+/*if (MetaData_est.variables[d].code == "Aasta") {
 	QueryAll.push({
       "code": Dim_name_est[d],
       "selection": {
         "filter": "item",
         "values": Years}
       });
-} else {
+} else {*/
 	QueryAll.push({
       "code": Dim_name_est[d],
       "selection": {
         "filter": "all",
         "values": ["*"]}
       });
-}
+//}
 	};
-*/
+
 var PostQueryAll=('{"query":'+JSON.stringify(QueryAll)+',"response":'+JSON.stringify({"format":"json"})+"}");
 
 myConnector.getData = function(table, doneCallback) {
