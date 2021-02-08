@@ -17,7 +17,7 @@ var TableName,
 	Dim_id_eng=[],
 	cols=[],
 	DIM_Schema=[],
-	StartYear=document.getElementById("Start").innerText, //Get StartYear from html file; Empty = all periods (years)
+	StartYear=2020, //document.getElementById("Start").innerText, //Get StartYear from html file; Empty = all periods (years)
 	Dim_max=0,
 	Dim_max_length=0,
 	Dim_max_value="",
@@ -46,9 +46,9 @@ if (MetaData_est.variables[i].code !== "Aasta") {
 	if (MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear};
 		};
 	}
-	if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]<StartYear) {
+/*	if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]<StartYear) {
 		alert("StartYear in html file ("+StartYear+") is larger than last year in data table ("+MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]+")! Do not fetch DataTable, WDC will crash!");
-	};
+	};*/
 }
 
 $.ajax({
@@ -243,7 +243,7 @@ if (MetaData_est.variables[d].code == "Aasta") {
         "filter": "all",
         "values": ["*"]}
       });
-//}
+}
 	};
 
 var PostQueryAll=('{"query":'+JSON.stringify(QueryAll)+',"response":'+JSON.stringify({"format":"json"})+"}");
