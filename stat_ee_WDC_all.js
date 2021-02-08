@@ -71,7 +71,7 @@ $.ajax({
   }); 
 
 
-		var apiPages = []; // Helper table for pulling data per page
+/*		var apiPages = []; // Helper table for pulling data per page
  for (var i = 0, len = MetaData_est.variables[Dim_max].values.length; i < len; i++) {	 
 
 	if (MetaData_est.variables[Dim_max].code !== "Aasta") {
@@ -79,13 +79,13 @@ $.ajax({
 	} else if (MetaData_est.variables[Dim_max].code == "Aasta" && MetaData_est.variables[Dim_max].values[i] >= StartYear) {
 		apiPages.push(MetaData_est.variables[Dim_max].values[i]);
 	};
-};
+};*/
 		var Years =[]; // Helper table for years to pull in case StartYear <>""
- for (var i = 0, len = MetaData_est.variables[DimAasta].values.length; i < len; i++) {
+ /*for (var i = 0, len = MetaData_est.variables[DimAasta].values.length; i < len; i++) {
 	if (MetaData_est.variables[DimAasta].values[i] >= StartYear) {
 		Years.push(MetaData_est.variables[DimAasta].values[i]);
 	};
-};
+};*/
 
    // Define the schema
 myConnector.getSchema = function(schemaCallback) {
@@ -191,8 +191,8 @@ function processData(tableData, resp) {
 	Query.push({
       "code": Dim_name_est[d],
       "selection": {
-        "filter": "item",
-        "values": Years}
+        "filter": "all",
+        "values": ["*"]}
       });
 } else {
 	Query.push({
@@ -229,14 +229,14 @@ var PostQuery=('{"query":'+JSON.stringify(Query)+',"response":'+JSON.stringify({
 //Define POST query for getting all data at once
 	var QueryAll=[];
 	for (var d = 0; d < DimNo; d++) {
-/*if (MetaData_est.variables[d].code == "Aasta") {
+if (MetaData_est.variables[d].code == "Aasta") {
 	QueryAll.push({
       "code": Dim_name_est[d],
       "selection": {
-        "filter": "item",
-        "values": Years}
+        "filter": "all",
+        "values": ["*"]}
       });
-} else {*/
+} else {
 	QueryAll.push({
       "code": Dim_name_est[d],
       "selection": {
@@ -293,7 +293,7 @@ $.ajax({type: "POST", url: Url, data: PostQueryAll, dataType: "json",
 	} else {alert("Error "+xhr.status+" ("+errorThrown+").");}
  }*/
 });
-} /* else {
+}  else {
 
 var K = 0; //control variable
 var P = 0; //Counter of number of cycles
@@ -325,7 +325,7 @@ var api_jj=apiPages.slice(api_j, api_j+~~(apiPages.length/(~~(CellsNo/MaxCells)+
 api_j+=~~(apiPages.length/(~~(CellsNo/MaxCells)+1))+1;
 } //for api_j/while end
 } // else end
-*/  };
+  };
 
 /*function chunkData(table, tableData){
        var row_index = 0;
