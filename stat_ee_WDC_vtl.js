@@ -45,16 +45,11 @@ if (MetaData_est.variables[i].code !== "Aasta" && MetaData_est.variables[i].code
 	CellsNo=CellsNo*(MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear +1);
 	DimAasta=i; 
 	if (MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear};
-		};
-	}
-	if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]<StartYear) {
-		alert("StartYear in html file ("+StartYear+") is larger than last year in data table ("+MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]+")! Do not fetch DataTable, WDC will crash!");
-	};
 } else if (MetaData_est.variables[i].code == "Vaatlusperiood") {
-	  for (var j = 0; j < MetaData_est.variables[i].values[response.variables[i].values.length; j++) {
-          if MetaData_est.variables[i].values[j].substring(0,4)=MetaData_est.variables[i].values[0].substring(0,4) {RefPerNo=RefPerNo+1;}
-         };
-  CellsNo=CellsNo*(MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-StartYear)*RefPerNo);
+		for (var j = 0; j < MetaData_est.variables[i].values[response.variables[i].values.length; j++) {
+          		if MetaData_est.variables[i].values[j].substring(0,4)=MetaData_est.variables[i].values[0].substring(0,4) {RefPerNo=RefPerNo+1;}
+         	};
+	CellsNo=CellsNo*(MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-StartYear)*RefPerNo);
 	DimAasta=i; 
 	if (MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-StartYear)*RefPerNo > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-StartYear)*RefPerNo};
 		};
@@ -63,6 +58,7 @@ if (MetaData_est.variables[i].code !== "Aasta" && MetaData_est.variables[i].code
 		alert("StartYear in html file ("+StartYear+") is larger than last year in data table ("+MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]+")! Do not fetch DataTable, WDC will crash!");
 	};
 }
+
 
 $.ajax({
   dataType: "json", async: false, url: Url, success: function(data){
