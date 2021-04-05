@@ -276,7 +276,7 @@ if (table.tableInfo.id == Dim_id_est[d]) {
 		TablePush[Dim_id_est[d]]=Dim_est;
 		TablePush[Dim_id_eng[d]]=Dim_eng;
 		tableData.push(TablePush);
-	} else if (Dim_name_est[d] == "Aasta" && Dim_est.substring(0,4) >= StartYear) {
+	} else if (Dim_est.substring(0,4) >= StartYear) {
 		TablePush[Dim_id[d]] = Dim_value;
 		TablePush[Dim_id_est[d]]=Dim_est;
 		TablePush[Dim_id_eng[d]]=Dim_eng;
