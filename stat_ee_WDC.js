@@ -12,7 +12,7 @@ var TableName,
 	ValueNo, //Number of values/cells
 	DimAasta, //Dimension id of Years or Reference period
 	CellsNo=1, //Number of cells
-  RefPerNo=0, //Number of Reference periods in one year
+  	RefPerNo=0, //Number of Reference periods in one year
 	Dim_id=[],
 	Dim_id_est=[],
 	Dim_id_eng=[],
