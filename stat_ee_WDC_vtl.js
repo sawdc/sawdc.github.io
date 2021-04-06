@@ -42,16 +42,16 @@ if (MetaData_est.variables[i].code !== "Aasta" && MetaData_est.variables[i].code
 	Dim_max_length=response.variables[i].values.length
 	};
 } else if (MetaData_est.variables[i].code == "Aasta") {
-	CellsNo=CellsNo*(MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear +1);
+	CellsNo=CellsNo*(MetaData_est.variables[i].values[response.variables[i].values.length-1] - Math.max(StartYear, MetaData_est.variables[i].values[0])+1);
 	DimAasta=i; 
-	if (MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear};
+	if (MetaData_est.variables[i].values[response.variables[i].values.length-1] - Math.max(StartYear, MetaData_est.variables[i].values[0]) > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].values[response.variables[i].values.length-1] - Math.max(StartYear, MetaData_est.variables[i].values[0])};
 } else if (MetaData_est.variables[i].code == "Vaatlusperiood") {
 		for (var j = 0; j < MetaData_est.variables[i].values[response.variables[i].values.length]; j++) {
           		if (MetaData_est.variables[i].values[j].substring(0,4) == MetaData_est.variables[i].values[0].substring(0,4)) {RefPerNo=RefPerNo+1;}
          	};
-	CellsNo=CellsNo*(MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-StartYear)*RefPerNo);
+	CellsNo=CellsNo*(MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-Math.max(StartYear, MetaData_est.variables[i].values[0]))*RefPerNo);
 	DimAasta=i; 
-	if (MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-StartYear)*RefPerNo > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-StartYear)*RefPerNo};
+	if (MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-Math.max(StartYear, MetaData_est.variables[i].values[0]))*RefPerNo > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-Math.max(StartYear, MetaData_est.variables[i].values[0]))*RefPerNo};
 		};
 	}
 	if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1].substring(0,4)<StartYear) {
