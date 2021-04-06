@@ -59,9 +59,9 @@ if (MetaData_est.variables[i].code !== "Aasta" && MetaData_est.variables[i].code
 	if (MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-Math.max(StartYear, MetaData_est.variables[i].values[0]))*RefPerNo > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-Math.max(StartYear, MetaData_est.variables[i].values[0]))*RefPerNo};
 		};
 	}
-	if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1].substring(0,4)<StartYear) {
+/*	if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1].substring(0,4)<StartYear) {
 		alert("StartYear in html file ("+StartYear+") is larger than last year in data table ("+MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]+")! Do not fetch DataTable, WDC will crash!");
-	};
+	};*/
 }
 
 $.ajax({
@@ -97,8 +97,7 @@ $.ajax({
 };
 		var Years =[]; // Helper table for years to pull in case StartYear <>"" and Aasta <> DimMax
  for (var i = 0, len = MetaData_est.variables[DimAasta].values.length; i < len; i++) {
-//	if (MetaData_est.variables[Dim_max].code !== "Aasta" && MetaData_est.variables[DimAasta].values[i] >= StartYear) {
-	if (MetaData_est.variables[DimAasta].values[i].substring(0,4) >= StartYear) {	 
+	if (MetaData_est.variables[Dim_max].code !== "Aasta" && MetaData_est.variables[DimAasta].values[i].substring(0,4) >= StartYear || MetaData_est.variables[Dim_max].code !== "Vaatlusperiood" && MetaData_est.variables[DimAasta].values[i].substring(0,4) >= StartYear) {	 
 		Years.push(MetaData_est.variables[DimAasta].values[i]);
 	};
 };
@@ -193,7 +192,7 @@ function processData(tableData, resp, u) {
 		for (var d = 0; d < DimNo; d++) {
 		TablePush[Dim_id[d]] = resp.data[i].key[d];		
 		}		
-	if (resp.data[i].values[0] !== "." && resp.data[i].values[0] !== ".." && resp.data[i].values[0] !== "...") {TablePush["obs"] = resp.data[i].values[0];}; //"." Data are confidential. ".." Data were not collected.
+	if (resp.data[i].values[0] !== "." && resp.data[i].values[0] !== ".." && resp.data[i].values[0] !== "...") {TablePush["obs"] = resp.data[i].values[0];}; //"." Data are confidential. ".." Data were not collected. "..." Data not (yet) available.
 	TablePush["tc"] = u;
 	tableData.push(TablePush);
 	}
