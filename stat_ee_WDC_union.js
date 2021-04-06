@@ -29,7 +29,7 @@ var TableName,
 	Dim_max_value="",
 	Dim_name_est=[],
 	Dim_name_eng=[];
-const MaxCells = 1000000; //Max no of cells limit 1 000 000 per query. For better performance smaller amounts could be retrieved.
+const MaxCells = 500000; //Max no of cells limit 1 000 000 per query. For better performance smaller amounts could be retrieved.
 	TableName = str;
 
 function callback_est(response) {
@@ -193,7 +193,7 @@ function processData(tableData, resp, u) {
 		for (var d = 0; d < DimNo; d++) {
 		TablePush[Dim_id[d]] = resp.data[i].key[d];		
 		}		
-	if (resp.data[i].values[0] !== "." && resp.data[i].values[0] !== "..") {TablePush["obs"] = resp.data[i].values[0];}; //"." Data are confidential. ".." Data were not collected.
+	if (resp.data[i].values[0] !== "." && resp.data[i].values[0] !== ".." && resp.data[i].values[0] !== "...") {TablePush["obs"] = resp.data[i].values[0];}; //"." Data are confidential. ".." Data were not collected.
 	TablePush["tc"] = u;
 	tableData.push(TablePush);
 	}
