@@ -17,6 +17,7 @@ var TableName,
 	ValueNo, //Number of values/cells
 	DimAasta, //Dimension id of Years
 	CellsNo=1, //Number of cells
+    	RefPerNo=0, //Number of Reference periods in one year
 	Dim_id=[],
 	Dim_id_est=[],
 	Dim_id_eng=[],
@@ -39,18 +40,28 @@ function callback_est(response) {
 		Dim_id[i] = "DIM"+i+"_id";
 		Dim_id_est[i]="DIM"+i+"_est";
 		Dim_name_est[i] = response.variables[i].text;
-if (MetaData_est.variables[i].code !== "Aasta") {
+if (MetaData_est.variables[i].code !== "Aasta" && MetaData_est.variables[i].code !== "Vaatlusperiood") {
 	CellsNo=CellsNo*response.variables[i].values.length;
 	if (response.variables[i].values.length > Dim_max_length) {
 	Dim_max=i;
 	Dim_max_length=response.variables[i].values.length
 	};
 } else if (MetaData_est.variables[i].code == "Aasta") {
-	CellsNo=CellsNo*(MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear +1);
+	CellsNo=CellsNo*(MetaData_est.variables[i].values[response.variables[i].values.length-1] - Math.max(StartYear, MetaData_est.variables[i].values[0]) +1);
 	DimAasta=i; 
-	if (MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].values[response.variables[i].values.length-1] - StartYear};
+	if (MetaData_est.variables[i].values[response.variables[i].values.length-1] - Math.max(StartYear, MetaData_est.variables[i].values[0]) > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].values[response.variables[i].values.length-1] - Math.max(StartYear, MetaData_est.variables[i].values[0])};
+} else if (MetaData_est.variables[i].code == "Vaatlusperiood") {
+		for (var j = 0; j < MetaData_est.variables[i].values[response.variables[i].values.length]; j++) {
+          		if (MetaData_est.variables[i].values[j].substring(0,4) == MetaData_est.variables[i].values[0].substring(0,4)) {RefPerNo=RefPerNo+1;}
+         	};
+	CellsNo=CellsNo*(MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-Math.max(StartYear, MetaData_est.variables[i].values[0]))*RefPerNo);
+	DimAasta=i; 
+	if (MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-Math.max(StartYear, MetaData_est.variables[i].values[0]))*RefPerNo > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-Math.max(StartYear, MetaData_est.variables[i].values[0]))*RefPerNo};
 		};
 	}
+	if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1].substring(0,4)<StartYear) {
+		alert("StartYear in html file ("+StartYear+") is larger than last year in data table ("+MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]+")! Do not fetch DataTable, WDC will crash!");
+	};
 }
 
 $.ajax({
@@ -76,15 +87,18 @@ $.ajax({
 		var apiPages = []; // Helper table for pulling data per page
  for (var i = 0, len = MetaData_est.variables[Dim_max].values.length; i < len; i++) {	 
 
-	if (MetaData_est.variables[Dim_max].code !== "Aasta") {
+	if (MetaData_est.variables[Dim_max].code !== "Aasta" && MetaData_est.variables[Dim_max].code !== "Vaatlusperiood") {
 		apiPages.push(MetaData_est.variables[Dim_max].values[i]);
 	} else if (MetaData_est.variables[Dim_max].code == "Aasta" && MetaData_est.variables[Dim_max].values[i] >= StartYear) {
+		apiPages.push(MetaData_est.variables[Dim_max].values[i]);
+	} else if (MetaData_est.variables[Dim_max].code == "Vaatlusperiood" && MetaData_est.variables[Dim_max].values[i].substring(0,4) >= StartYear) {
 		apiPages.push(MetaData_est.variables[Dim_max].values[i]);
 	};
 };
 		var Years =[]; // Helper table for years to pull in case StartYear <>"" and Aasta <> DimMax
  for (var i = 0, len = MetaData_est.variables[DimAasta].values.length; i < len; i++) {
-	if (MetaData_est.variables[Dim_max].code !== "Aasta" && MetaData_est.variables[DimAasta].values[i] >= StartYear) {
+//	if (MetaData_est.variables[Dim_max].code !== "Aasta" && MetaData_est.variables[DimAasta].values[i] >= StartYear) {
+	if (MetaData_est.variables[DimAasta].values[i].substring(0,4) >= StartYear) {	 
 		Years.push(MetaData_est.variables[DimAasta].values[i]);
 	};
 };
@@ -195,7 +209,7 @@ function processData(tableData, resp, u) {
         "filter": "item",
         "values": api_j}
 	});
-} else if (d !== Dim_max && MetaData_est.variables[d].code == "Aasta") {
+} else if (d !== Dim_max && MetaData_est.variables[d].code == "Aasta" || d !== Dim_max && MetaData_est.variables[d].code == "Vaatlusperiood") {
 	Query.push({
       "code": Dim_name_est[d],
       "selection": {
@@ -225,15 +239,19 @@ var PostQuery=('{"query":'+JSON.stringify(Query)+',"response":'+JSON.stringify({
 		    	finishedCallback();
 			}
 	}
-	/*,
-    	error: function (jqXhr, textStatus, errorMessage) {console.log('Error' + errorMessage);}*/
+	,
+    	error: function(xhr, textStatus, errorThrown) {
+		if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1].substring(0,4) <StartYear) {
+			alert("Error "+xhr.status+" ("+errorThrown+"). Remove or decrease StartYear value in html file.");
+		} else {alert("Error "+xhr.status+" ("+errorThrown+").");}
+	}
 	});
     };
 
 //Define POST query for getting all data at once
 	var QueryAll=[];
 	for (var d = 0; d < DimNo; d++) {
-if (MetaData_est.variables[d].code == "Aasta") {
+if (MetaData_est.variables[d].code == "Aasta" || MetaData_est.variables[d].code == "Vaatlusperiood") {
 	QueryAll.push({
       "code": Dim_name_est[d],
       "selection": {
@@ -283,12 +301,12 @@ if (table.tableInfo.id == Dim_id_est[d]) {
 		Dim_est = MetaData_est.variables[d].valueTexts[i];
 		Dim_eng = MetaData_eng.variables[d].valueTexts[i];
 		var TablePush = {}; // {} will create an object
-	if (Dim_name_est[d] !== "Aasta") {
+	if (Dim_name_est[d] !== "Aasta" && Dim_name_est[d] !== "Vaatlusperiood") {
 		TablePush[Dim_id[d]] = Dim_value;
 		TablePush[Dim_id_est[d]]=Dim_est;
 		TablePush[Dim_id_eng[d]]=Dim_eng;
 		tableData.push(TablePush);
-	} else if (Dim_name_est[d] == "Aasta" && Dim_est >= StartYear) {
+	} else if (Dim_est.substring(0,4) >= StartYear) {
 		TablePush[Dim_id[d]] = Dim_value;
 		TablePush[Dim_id_est[d]]=Dim_est;
 		TablePush[Dim_id_eng[d]]=Dim_eng;
@@ -321,7 +339,7 @@ for (var api_j = 0, len_j = UnionMembers.length; api_j < len_j; api_j++) {
 				}
 		});
 }
-} else { //Doesn not work currently, gets only data for the first union member
+} else { //Does not work currently, gets only data for the first union member
 
 var K = 0; //control variable
 var P = 0; //Counter of number of cycles
