@@ -149,8 +149,8 @@ if (table.tableInfo.id !== TableCode) {
 
 } else {
 
-
-	let data = MetaData.toTable({ type: "arrobj", content: "id" });
+	let data =[{value: 114.806, time: "2020", geo: "EE", na_item: "B1GQ", unit: "CLV_I15"}, {value: 108.747, time: "2019", geo: "FI", na_item: "B1GQ", unit: "CLV_I15"}];
+//	let data = MetaData.toTable({ type: "arrobj", content: "id" });
 	var c=0;
 	let TablePush = {};
 	for (var row = 0; row < data.length; row++) {
