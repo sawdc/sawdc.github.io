@@ -26,7 +26,7 @@ $.ajax({
  function callback_Eurostat(response) {
 		EurostatData =response;
 		TableName = TableCode+": "+response.label;
-		MetaData=JSONstat(response);
+//		MetaData=JSONstat(response);
 		DimNo=response.id.length;
 		for (var i = 0; i < DimNo; i++) {
 		Dim_id[i]="DIM"+i+"_id";
