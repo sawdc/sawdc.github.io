@@ -117,10 +117,10 @@ let tableData = [];
 if (table.tableInfo.id !== TableCode) {
 	for (var d = 0; d < DimNo; d++) {
 	if (table.tableInfo.id == Dim_id[d]) {
-		for (var i = 0, len = MetaData.Dimension(d).length; i < len; i++) {	 
+		for (var i = 0, len = Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index).length; i < len; i++) {	 
 		var TablePush = {}; // {} will create an object
-		Dim_value = MetaData.Dimension(d).id[i]; 
-		Dim_eng = MetaData.Dimension(d).Category(i).label;
+		Dim_value = Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index)[i]; 
+		Dim_eng = EurostatData.dimension[Dim_name_eng[d]].category.label[Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index)[i]];
 
 		var translate_output;
 		function callback_translate(response) {
