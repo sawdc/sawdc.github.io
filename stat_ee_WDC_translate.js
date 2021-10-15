@@ -73,8 +73,8 @@ function translate(input_text, lang) {function callback_translate(response) {
 		translate_output=response.result;};
 			$.ajax({type: "POST",
 			async: false,
-			headers: {'Content-Type': 'application/json'},
-			application: "MKM Tableau WDC", 
+			headers: {'Content-Type': 'application/json',
+			'application': 'MKM Tableau WDC'},
 			url: 'https://api.tartunlp.ai/translation/v2',
 			data: JSON.stringify({text: input_text, src: "et", tgt: lang, domain: "fml"}),
 			dataType: "json",
