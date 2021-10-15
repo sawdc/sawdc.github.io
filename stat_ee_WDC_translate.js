@@ -307,8 +307,10 @@ if (table.tableInfo.id == Dim_id_est[d]) {
 	} else if (Dim_est.substring(0,4) >= StartYear) {
 		TablePush[Dim_id[d]] = Dim_value;
 		TablePush[Dim_id_est[d]]=Dim_est;
-		TablePush[Dim_id_eng[d]]=Dim_est; //Year/reference period, same as in Estonian
-		TablePush[Dim_id_lang[d]]=Dim_est; //Year/reference period, same as in Estonian
+		TablePush[Dim_id_eng[d]]=Dim_eng;
+		translate(Dim_est, language);
+		Dim_lang = translate_output;		
+		TablePush[Dim_id_lang[d]]=Dim_lang;
 		tableData.push(TablePush);
 	};
  	}
