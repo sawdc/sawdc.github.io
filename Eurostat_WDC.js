@@ -17,11 +17,6 @@ var TableName,
 	Dim_name_est=[],
 	Dim_name_eng=[];
 
-$.ajax({
-  dataType: "json", async: false, url: Url_Eurostat, success: function(data){
-       callback_Eurostat(data);}
-  }); 
-
 
  function callback_Eurostat(response) {
 		EurostatData =response;
@@ -37,6 +32,11 @@ $.ajax({
 		}
 }
 
+$.ajax({
+  dataType: "json", async: false, url: Url_Eurostat, success: function(data){
+       callback_Eurostat(data);}
+  }); 	
+	
    // Define the schema
 myConnector.getSchema = function(schemaCallback) {
 var SchemaList=[];
