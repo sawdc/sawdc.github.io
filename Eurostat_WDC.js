@@ -7,7 +7,7 @@
 	Url_Eurostat = "http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+TableCode+"?"+Filters;
 
 var TableName,
-	DimNo, //Number of dimensions
+	DimNo=4, //Number of dimensions
 	Dim_id=[],
 	Dim_id_eng=[],
 	Dim_id_est=[],
