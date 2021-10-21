@@ -33,7 +33,7 @@ var TableName,
 }
 
 $.ajax({
-  dataType: "json", async: false, url: Url_Eurostat, success: function(data){
+  type: "GET", dataType: "json", async: false, url: Url_Eurostat, success: function(data){
        callback_Eurostat(data);}
   }); 	
 	
