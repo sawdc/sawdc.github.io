@@ -28,9 +28,9 @@ var TableName,
 		Dim_name_est[i] = i+"_est";		
 		}
 	
- /* function callback_Eurostat(response) {
+  function callback_Eurostat(response) {
 		EurostatData =response;
-		TableName = TableCode+": "+response.label;
+/*		TableName = TableCode+": "+response.label;
 //		MetaData=JSONstat(response);
 		DimNo=response.id.length;
 		for (var i = 0; i < DimNo; i++) {
@@ -39,14 +39,14 @@ var TableName,
 		Dim_id_est[i] = "DIM"+i+"_est";
 		Dim_name_eng[i] = EurostatData.id[i];
 		Dim_name_est[i] = EurostatData.id[i]+"_est";		
-		}
+		}*/
 }
 
 $.ajax({
   type: "GET", dataType: "json", async: false, url: Url_Eurostat, success: function(data){
        callback_Eurostat(data);}
   }); 	
-*/	
+	
    // Define the schema
 myConnector.getSchema = function(schemaCallback) {
 var SchemaList=[];
