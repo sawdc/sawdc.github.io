@@ -30,7 +30,8 @@ var TableName,
 		Dim_name_eng[i] = EurostatData.id[i];
 		Dim_name_est[i] = EurostatData.id[i]+"_est";		
 		}
-}
+schema();
+ }
 
 $.ajax({
   dataType: "json", async: false, url: Url_Eurostat, success: function(data){
@@ -38,6 +39,7 @@ $.ajax({
   }); 	
 	
    // Define the schema
+function schema() {
 myConnector.getSchema = function(schemaCallback) {
 var SchemaList=[];
 // Define dimensions
@@ -105,6 +107,9 @@ var standardConnection ={"alias": "Joined data", "tables": [{
 schemaCallback(SchemaList, [standardConnection]);
 };
 
+};
+	
+	
 myConnector.init = function(initCallback) {
 	initCallback();
 	tableau.connectionName = TableName;
