@@ -30,8 +30,7 @@ var TableName,
 		Dim_name_eng[i] = EurostatData.id[i];
 		Dim_name_est[i] = EurostatData.id[i]+"_est";		
 		}
-
- }
+}
 
 $.ajax({
   dataType: "json", async: false, url: Url_Eurostat, success: function(data){
@@ -39,7 +38,6 @@ $.ajax({
   }); 	
 	
    // Define the schema
-//function schema() {
 myConnector.getSchema = function(schemaCallback) {
 var SchemaList=[];
 // Define dimensions
@@ -90,7 +88,7 @@ var standardConnection ={"alias": "Joined data", "tables": [{
         "id": TableCode,
         "alias": "Datatable"
     }], "joins":[]};
-	for (var d = 0; d < 4; d++) {
+	for (var d = 0; d < DimNo; d++) {
 	standardConnection.tables.push({
         "id": Dim_id_eng[d],
         "alias": Dim_name_eng[d]
@@ -107,9 +105,13 @@ var standardConnection ={"alias": "Joined data", "tables": [{
 schemaCallback(SchemaList, [standardConnection]);
 };
 
-	
+myConnector.init = function(initCallback) {
+	initCallback();
+	tableau.connectionName = TableName;
+    	tableau.submit();
+};
 
-//};	
+
 myConnector.getData = function(table, doneCallback) {
 let tableData = [];
 if (table.tableInfo.id !== TableCode) {
@@ -168,9 +170,5 @@ if (table.tableInfo.id !== TableCode) {
   };
 
 	tableau.registerConnector(myConnector);
-myConnector.init = function(initCallback) {
-	initCallback();
-	tableau.connectionName = TableName;
-    	tableau.submit();
-};
+
 })();
