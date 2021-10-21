@@ -17,8 +17,18 @@ var TableName,
 	Dim_name_est=[],
 	Dim_name_eng=[];
 
-
- function callback_Eurostat(response) {
+		TableName = TableCode+": "+"proov";
+//		MetaData=JSONstat(response);
+		DimNo=4;
+		for (var i = 0; i < DimNo; i++) {
+		Dim_id[i]="DIM"+i+"_id";
+		Dim_id_eng[i] = "DIM"+i+"_eng";
+		Dim_id_est[i] = "DIM"+i+"_est";
+		Dim_name_eng[i] = EurostatData.id[i];
+		Dim_name_est[i] = EurostatData.id[i]+"_est";		
+		}
+	
+ /* function callback_Eurostat(response) {
 		EurostatData =response;
 		TableName = TableCode+": "+response.label;
 //		MetaData=JSONstat(response);
@@ -36,7 +46,7 @@ $.ajax({
   type: "GET", dataType: "json", async: false, url: Url_Eurostat, success: function(data){
        callback_Eurostat(data);}
   }); 	
-	
+*/	
    // Define the schema
 myConnector.getSchema = function(schemaCallback) {
 var SchemaList=[];
