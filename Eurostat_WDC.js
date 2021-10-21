@@ -43,7 +43,7 @@ $.ajax({
 myConnector.getSchema = function(schemaCallback) {
 var SchemaList=[];
 // Define dimensions
-for (var d = 0; d < DimNo; d++) {   
+for (var d = 0; d < 4; d++) {   
     var DIMcols = [{
             id: Dim_id[d],
             alias: Dim_id[d],
@@ -62,13 +62,13 @@ for (var d = 0; d < DimNo; d++) {
             columns: DIMcols
         };
 }
-	for (var d = 0; d < DimNo; d++) {
+	for (var d = 0; d < 4; d++) {
 	SchemaList.push(DIM_Schema[d]);
 	}
 
 // Define datatable
 	var cols_DataTable=[];
-	for (var d = 0; d < DimNo; d++) {
+	for (var d = 0; d < 4; d++) {
 	cols_DataTable.push({
             id: Dim_id[d],
             alias: Dim_id[d],
@@ -90,7 +90,7 @@ var standardConnection ={"alias": "Joined data", "tables": [{
         "id": TableCode,
         "alias": "Datatable"
     }], "joins":[]};
-	for (var d = 0; d < DimNo; d++) {
+	for (var d = 0; d < 4; d++) {
 	standardConnection.tables.push({
         "id": Dim_id_eng[d],
         "alias": Dim_name_eng[d]
