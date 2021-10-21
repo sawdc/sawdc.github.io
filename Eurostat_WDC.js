@@ -23,7 +23,7 @@ var TableName,
 		TableName = TableCode+": "+response.label;
 //		MetaData=JSONstat(response);
 		DimNo=response.id.length;
-		for (var i = 0; i < 4; i++) {
+		for (var i = 0; i < DimNo; i++) {
 		Dim_id[i]="DIM"+i+"_id";
 		Dim_id_eng[i] = "DIM"+i+"_eng";
 		Dim_id_est[i] = "DIM"+i+"_est";
@@ -43,7 +43,7 @@ $.ajax({
 myConnector.getSchema = function(schemaCallback) {
 var SchemaList=[];
 // Define dimensions
-for (var d = 0; d < 4; d++) {   
+for (var d = 0; d < DimNo; d++) {   
     var DIMcols = [{
             id: Dim_id[d],
             alias: Dim_id[d],
@@ -62,13 +62,13 @@ for (var d = 0; d < 4; d++) {
             columns: DIMcols
         };
 }
-	for (var d = 0; d < 4; d++) {
+	for (var d = 0; d < DimNo; d++) {
 	SchemaList.push(DIM_Schema[d]);
 	}
 
 // Define datatable
 	var cols_DataTable=[];
-	for (var d = 0; d < 4; d++) {
+	for (var d = 0; d < DimNo; d++) {
 	cols_DataTable.push({
             id: Dim_id[d],
             alias: Dim_id[d],
