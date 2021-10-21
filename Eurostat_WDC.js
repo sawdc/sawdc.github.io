@@ -105,13 +105,6 @@ var standardConnection ={"alias": "Joined data", "tables": [{
 schemaCallback(SchemaList, [standardConnection]);
 };
 
-myConnector.init = function(initCallback) {
-	initCallback();
-	tableau.connectionName = TableName;
-    	tableau.submit();
-};
-
-
 myConnector.getData = function(table, doneCallback) {
 let tableData = [];
 if (table.tableInfo.id !== TableCode) {
@@ -171,4 +164,12 @@ if (table.tableInfo.id !== TableCode) {
 
 	tableau.registerConnector(myConnector);
 
+myConnector.init = function(initCallback) {
+initCallback();
+tableau.connectionName = TableName;
+tableau.submit();
+	
+};
+	
+	
 })();
