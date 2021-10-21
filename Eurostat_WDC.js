@@ -24,8 +24,8 @@ var TableName,
 		Dim_id[i]="DIM"+i+"_id";
 		Dim_id_eng[i] = "DIM"+i+"_eng";
 		Dim_id_est[i] = "DIM"+i+"_est";
-		Dim_name_eng[i] = EurostatData.id[i];
-		Dim_name_est[i] = EurostatData.id[i]+"_est";		
+		Dim_name_eng[i] = i+"_eng";
+		Dim_name_est[i] = i+"_est";		
 		}
 	
  /* function callback_Eurostat(response) {
