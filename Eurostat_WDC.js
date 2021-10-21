@@ -23,7 +23,7 @@ var TableName,
 		TableName = TableCode+": "+response.label;
 //		MetaData=JSONstat(response);
 		DimNo=response.id.length;
-		for (var i = 0; i < DimNo; i++) {
+		for (var i = 0; i < 4; i++) {
 		Dim_id[i]="DIM"+i+"_id";
 		Dim_id_eng[i] = "DIM"+i+"_eng";
 		Dim_id_est[i] = "DIM"+i+"_est";
