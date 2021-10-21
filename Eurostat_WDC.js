@@ -35,11 +35,11 @@ var TableName,
 
 $.ajax({
   dataType: "json", async: false, url: Url_Eurostat, success: function(data){
-       callback_Eurostat(data); schema();}
+       callback_Eurostat(data);}
   }); 	
 	
    // Define the schema
-function schema() {
+//function schema() {
 myConnector.getSchema = function(schemaCallback) {
 var SchemaList=[];
 // Define dimensions
@@ -109,7 +109,7 @@ schemaCallback(SchemaList, [standardConnection]);
 
 	
 
-};	
+//};	
 myConnector.getData = function(table, doneCallback) {
 let tableData = [];
 if (table.tableInfo.id !== TableCode) {
