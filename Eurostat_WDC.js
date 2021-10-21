@@ -113,8 +113,6 @@ myConnector.init = function(initCallback) {
 	tableau.connectionName = TableName;
     	tableau.submit();
 };
-
-};
 	
 myConnector.getData = function(table, doneCallback) {
 let tableData = [];
@@ -169,7 +167,7 @@ if (table.tableInfo.id !== TableCode) {
  doneCallback();
 
 };
-
+};
 
   };
 
