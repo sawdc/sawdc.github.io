@@ -45,7 +45,7 @@ function callback_Eurostat(response) {
 }
 
 $.ajax({
-  dataType: "json", async: false, url: Url_Eurostat, success: function(data){
+  dataType: "json", async: true, url: Url_Eurostat, success: function(data){
        callback_Eurostat(data);}
   });
 
