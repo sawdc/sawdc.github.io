@@ -31,7 +31,7 @@ var TableName,
   function callback_Eurostat(response) {
 		EurostatData =response;
 		TableName = TableCode+": "+response.label;
-//		MetaData=JSONstat(response);
+		MetaData=JSONstat(response);
 		DimNo=response.id.length;
 		for (var i = 0; i < DimNo; i++) {
 		Dim_id[i]="DIM"+i+"_id";
@@ -155,8 +155,8 @@ if (table.tableInfo.id !== TableCode) {
 
 } else {
 
-	let data =[{value: 114.806, time: "2020", geo: "EE", na_item: "B1GQ", unit: "CLV_I15"}, {value: 108.747, time: "2019", geo: "FI", na_item: "B1GQ", unit: "CLV_I15"}];
-//	let data = MetaData.toTable({ type: "arrobj", content: "id" });
+//	let data =[{value: 114.806, time: "2020", geo: "EE", na_item: "B1GQ", unit: "CLV_I15"}, {value: 108.747, time: "2019", geo: "FI", na_item: "B1GQ", unit: "CLV_I15"}];
+	let data = MetaData.toTable({ type: "arrobj", content: "id" });
 	var c=0;
 	let TablePush = {};
 	for (var row = 0; row < data.length; row++) {
