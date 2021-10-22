@@ -43,7 +43,7 @@ function callback_Eurostat(response) {
 		}
 */
 }
-
+jQuery.support.cors = true;
 $.ajax({
   dataType: "json", async: false, url: Url_Eurostat, success: function(data){
        callback_Eurostat(data);}
