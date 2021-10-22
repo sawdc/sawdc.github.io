@@ -45,7 +45,7 @@ function callback_Eurostat(response) {
 }
 
 $.ajax({
-  dataType: "json", async: true, url: Url_Eurostat, success: function(data){
+  dataType: "json", async: false, url: Url_Eurostat, success: function(data){
        callback_Eurostat(data);}
   });
 
@@ -73,7 +73,7 @@ if (MetaData_est.variables[i].code !== "Aasta") {
 }
 
 $.ajax({
-  dataType: "json", async: true, url: Url, success: function(data){
+  dataType: "json", async: false, url: Url, success: function(data){
        callback_est(data);}
   });
 
@@ -87,7 +87,7 @@ $.ajax({
 }
 
  $.ajax({
-  dataType: "json", async: true, url: Url_eng, success: function(data){
+  dataType: "json", async: false, url: Url_eng, success: function(data){
        callback_eng(data);}
   }); 
 
