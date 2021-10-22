@@ -47,7 +47,8 @@ function callback_Eurostat(response) {
 $.ajax({
   dataType: "json", async: false, url: Url_Eurostat, success: function(data){
        callback_Eurostat(data);}
-  });
+, error: function() {TableName = "mingi jama";}
+});
 
 
 function callback_est(response) {
