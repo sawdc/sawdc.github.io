@@ -8,7 +8,7 @@
 	Url = "https://andmed.stat.ee/api/v1/et/stat/"+ TableCode; //metadata url
 	Url_eng = "https://andmed.stat.ee/api/v1/en/stat/"+ TableCode;
 	Filters="na_item=B1GQ&sinceTimePeriod=2019&precision=1&geo=EE&geo=FI&geo=LV&unit=CLV_I15&unitLabel=label";
-	Url_Eurostat = "http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/nama_10_gdp?"+Filters;
+	Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/nama_10_gdp?"+Filters;
 console.log(Url_Eurostat);
 
 var TableName,
