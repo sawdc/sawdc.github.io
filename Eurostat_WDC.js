@@ -4,7 +4,7 @@
 
 	var TableCode = window.location.pathname.split("/").pop().split(".").shift(); //Get html file name and use it for TableCode
 	var Filters=document.getElementById("Filters").innerText; //Get Filters from html file
-	Url_Eurostat = "http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+TableCode+"?"+Filters;
+	Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+TableCode+"?"+Filters;
 
 var TableName,
 	DimNo, //Number of dimensions
@@ -44,8 +44,9 @@ var TableName,
 
 jQuery.support.cors = true;
 $.ajax({
-  type: "GET", dataType: "json", async: false, url: Url_Eurostat, success: function(data){
-       callback_Eurostat(data);}
+  type: "GET", dataType: "json", async: false, url: Url_Eurostat, 
+	success: function(data){callback_Eurostat(data);},
+	error: function (jqXhr, textStatus, errorMessage) {TableName = "mingi jama: "+errorMessage;}
   }); 	
 	
    // Define the schema
