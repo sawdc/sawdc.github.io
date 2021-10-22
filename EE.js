@@ -44,16 +44,17 @@ function callback_Eurostat(response) {
 */
 }
 
-$.ajax({
-  dataType: "json", async: false, url: Url_Eurostat, success: function(data){
+function Euro() {$.ajax({
+  dataType: "json", async: true, url: Url_Eurostat, success: function(data){
        callback_Eurostat(data);}
 , error: function (jqXhr, textStatus, errorMessage) {TableName = "mingi jama:"+errorMessage;}
 });
-
+		}
 
 function callback_est(response) {
 //	TableName = response.title;
 	MetaData_est =response;  //defining metadata
+Euro();
 	DimNo = response.variables.length;
 		for (var i = 0; i < DimNo; i++) {
 		Dim_id[i] = "DIM"+i+"_id";
