@@ -41,15 +41,16 @@ var TableName,
 		Dim_name_est[i] = EurostatData.id[i]+"_est";		
 		}
 }
-function esimene(){
+
+jQuery.support.cors = true;
 $.ajax({
   type: "GET", dataType: "json", async: false, url: Url_Eurostat, success: function(data){
        callback_Eurostat(data);}
   }); 	
-};	
+	
    // Define the schema
 myConnector.getSchema = function(schemaCallback) {
-esimene();
+
 var SchemaList=[];
 // Define dimensions
 for (var d = 0; d < DimNo; d++) {   
