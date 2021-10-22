@@ -46,7 +46,7 @@ $.ajax({
   type: "GET", dataType: "json", async: false, url: Url_Eurostat, success: function(data){
        callback_Eurostat(data);}
   }); 	
-}:	
+};	
    // Define the schema
 myConnector.getSchema = function(schemaCallback) {
 esimene();
