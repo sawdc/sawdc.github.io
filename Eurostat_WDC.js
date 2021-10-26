@@ -48,6 +48,19 @@ $.ajax({
 	success: function(data){callback_Eurostat(data);},
 	error: function (jqXhr, textStatus, errorMessage) {TableName = "mingi jama: "+errorMessage;}
   }); 	
+
+function translate(input_text) {function callback_translate(response) {
+		translate_output=response.result;};
+			$.ajax({type: "POST",
+			async: false,
+			headers: {'Content-Type': 'application/json',
+			'application': 'MKM Tableau WDC'},
+			url: 'https://api.tartunlp.ai/translation/v2',
+			data: JSON.stringify({text: input_text, src: "en", tgt: "et", domain: "fml"}),
+			dataType: "json",
+ 			success: function(resp) {callback_translate(resp);} 
+			});
+};	
 	
    // Define the schema
 myConnector.getSchema = function(schemaCallback) {
@@ -127,19 +140,7 @@ if (table.tableInfo.id !== TableCode) {
 		var TablePush = {}; // {} will create an object
 		Dim_value = Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index)[i]; 
 		Dim_eng = EurostatData.dimension[Dim_name_eng[d]].category.label[Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index)[i]];
-
-		var translate_output;
-		function callback_translate(response) {
-		translate_output=response.result;};
-			$.ajax({type: "POST",
-			async: false,
-			headers: {'Content-Type': 'application/json'}, 
-			url: 'https://api.tartunlp.ai/translation/v2',
-			data: JSON.stringify({text: Dim_eng, src: "en", tgt: "et", domain: "fml"}),
-			dataType: "json",
- 			success: function(resp) {callback_translate(resp);} 
-			});
-
+		translate(Dim_eng);
 		Dim_est = translate_output;
 		TablePush[Dim_id_est[d]]=Dim_est;
 		TablePush[Dim_id[d]] = Dim_value;
