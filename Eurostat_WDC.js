@@ -16,17 +16,6 @@ var TableName,
 	DIM_Schema=[],
 	Dim_name_est=[],
 	Dim_name_eng=[];
-
-/*		TableName = TableCode+": "+"proov";
-//		MetaData=JSONstat(response);
-		DimNo=4;
-		for (var i = 0; i < DimNo; i++) {
-		Dim_id[i]="DIM"+i+"_id";
-		Dim_id_eng[i] = "DIM"+i+"_eng";
-		Dim_id_est[i] = "DIM"+i+"_est";
-		Dim_name_eng[i] = i+"_eng";
-		Dim_name_est[i] = i+"_est";		
-		}*/
 	
   function callback_Eurostat(response) {
 		EurostatData =response;
@@ -156,7 +145,6 @@ if (table.tableInfo.id !== TableCode) {
 
 } else {
 
-//	let data =[{value: 114.806, time: "2020", geo: "EE", na_item: "B1GQ", unit: "CLV_I15"}, {value: 108.747, time: "2019", geo: "FI", na_item: "B1GQ", unit: "CLV_I15"}];
 	let data = MetaData.toTable({ type: "arrobj", content: "id" });
 	var c=0;
 	let TablePush = {};
