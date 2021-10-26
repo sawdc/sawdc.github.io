@@ -116,7 +116,7 @@ var standardConnection ={"alias": "Joined data", "tables": [{
     }], "joins":[]};
 	for (var d = 0; d < DimNo; d++) {
 	standardConnection.tables.push({
-        "id": Dim_id_eng[d],
+        "id": Dim_id[d],
         "alias": Dim_name_eng[d]
 	});
 	standardConnection.joins.push({"left": {
@@ -135,7 +135,7 @@ myConnector.getData = function(table, doneCallback) {
 let tableData = [];
 if (table.tableInfo.id !== TableCode) {
 	for (var d = 0; d < DimNo; d++) {
-	if (table.tableInfo.id == Dim_id_eng[d]) {
+	if (table.tableInfo.id == Dim_id[d]) {
 		for (var i = 0, len = Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index).length; i < len; i++) {	 
 		var TablePush = {}; // {} will create an object
 		Dim_value = Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index)[i]; 
