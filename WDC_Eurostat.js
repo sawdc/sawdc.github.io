@@ -185,8 +185,8 @@ if (table.tableInfo.id !== TableCode) {
     $(document).ready(function() {
         $("#submitButton").click(function() {
             var formObj = {
-                TableCode: $('#TC').val().trim(),
-                Filters: $('#F').val().trim(),
+                TC: $('#TC').val().trim(),
+                F: $('#F').val().trim(),
             };
 
 
