@@ -5,7 +5,7 @@
 //	var TableCode = window.location.pathname.split("/").pop().split(".").shift(); //Get html file name and use it for TableCode
 //	var Filters=document.getElementById("Filters").innerText; //Get Filters from html file
 var formObj = JSON.parse(tableau.connectionData),
-    Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.TC+"?"+formObj.F;
+    Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.TableCode+"?"+formObj.Filters;
 
 var TableName,
 	DimNo, //Number of dimensions
@@ -185,8 +185,8 @@ if (table.tableInfo.id !== TableCode) {
     $(document).ready(function() {
         $("#submitButton").click(function() {
             var formObj = {
-                TC: $('#TC').val().trim(),
-                F: $('#F').val().trim(),
+                TableCode: $('#TC').val().trim(),
+                Filters: $('#F').val().trim()
             };
 
 
