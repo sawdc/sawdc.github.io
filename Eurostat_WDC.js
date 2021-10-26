@@ -135,7 +135,7 @@ myConnector.getData = function(table, doneCallback) {
 let tableData = [];
 if (table.tableInfo.id !== TableCode) {
 	for (var d = 0; d < DimNo; d++) {
-	if (table.tableInfo.id == Dim_id[d]) {
+	if (table.tableInfo.id == Dim_id_eng[d]) {
 		for (var i = 0, len = Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index).length; i < len; i++) {	 
 		var TablePush = {}; // {} will create an object
 		Dim_value = Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index)[i]; 
