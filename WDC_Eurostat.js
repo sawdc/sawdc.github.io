@@ -1,11 +1,7 @@
 (function() {
     // Create the connector object
-    var myConnector = tableau.makeConnector();
 
-//	var TableCode = window.location.pathname.split("/").pop().split(".").shift(); //Get html file name and use it for TableCode
-//	var Filters=document.getElementById("Filters").innerText; //Get Filters from html file
-var formObj1 = JSON.parse(tableau.connectionData),
-    Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj1.TableCode+"?"+formObj1.Filters;
+    var myConnector = tableau.makeConnector();
 
 var TableName,
 	DimNo, //Number of dimensions
@@ -17,38 +13,6 @@ var TableName,
 	DIM_Schema=[],
 	Dim_name_est=[],
 	Dim_name_eng=[];
-
-/*		TableName = TableCode+": "+"proov";
-//		MetaData=JSONstat(response);
-		DimNo=4;
-		for (var i = 0; i < DimNo; i++) {
-		Dim_id[i]="DIM"+i+"_id";
-		Dim_id_eng[i] = "DIM"+i+"_eng";
-		Dim_id_est[i] = "DIM"+i+"_est";
-		Dim_name_eng[i] = i+"_eng";
-		Dim_name_est[i] = i+"_est";		
-		}*/
-	
-  function callback_Eurostat(response) {
-		EurostatData =response;
-		TableName = TableCode+": "+response.label;
-		MetaData=JSONstat(response);
-		DimNo=response.id.length;
-		for (var i = 0; i < DimNo; i++) {
-		Dim_id[i]="DIM"+i+"_id";
-		Dim_id_eng[i] = "DIM"+i+"_eng";
-		Dim_id_est[i] = "DIM"+i+"_est";
-		Dim_name_eng[i] = EurostatData.id[i];
-		Dim_name_est[i] = EurostatData.id[i]+"_est";		
-		}
-}
-
-jQuery.support.cors = true;
-$.ajax({
-  type: "GET", dataType: "json", async: false, url: Url_Eurostat, 
-	success: function(data){callback_Eurostat(data);},
-	error: function (jqXhr, textStatus, errorMessage) {TableName = "mingi jama: "+errorMessage;}
-  }); 	
 
 function translate(input_text) {function callback_translate(response) {
 		translate_output=response.result;};
@@ -65,6 +29,29 @@ function translate(input_text) {function callback_translate(response) {
 	
    // Define the schema
 myConnector.getSchema = function(schemaCallback) {
+formObj = JSON.parse(tableau.connectionData);
+var Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
+  function callback_Eurostat(response) {
+		EurostatData =response;
+		TableName = formObj.TableCode+": "+response.label;
+//		MetaData=JSONstat(response);
+		DimNo=response.id.length;
+		for (var i = 0; i < DimNo; i++) {
+		Dim_id[i]="DIM"+i+"_id";
+		Dim_id_eng[i] = "DIM"+i+"_eng";
+		Dim_id_est[i] = "DIM"+i+"_est";
+		Dim_name_eng[i] = EurostatData.id[i];
+		Dim_name_est[i] = EurostatData.id[i]+"_est";		
+		}
+}
+
+jQuery.support.cors = true;
+$.ajax({
+  type: "GET", dataType: "json", async: false, url: Url_Eurostat, 
+	success: function(data){callback_Eurostat(data);},
+	error: function (jqXhr, textStatus, errorMessage) {TableName = "Error: "+errorMessage;}
+  }); 	
+tableau.connectionName = TableName;
 
 var SchemaList=[];
 // Define dimensions
@@ -104,7 +91,7 @@ for (var d = 0; d < DimNo; d++) {
             dataType: tableau.dataTypeEnum.float});
 
         var DataTableSchema = {
-            id: TableCode,
+            id: formObj.TableCode,
             alias: "Datatable",
             columns: cols_DataTable
         };
@@ -112,7 +99,7 @@ SchemaList.push(DataTableSchema);
 
 //Define joins
 var standardConnection ={"alias": "Joined data", "tables": [{
-        "id": TableCode,
+        "id": formObj.TableCode,
         "alias": "Datatable"
     }], "joins":[]};
 	for (var d = 0; d < DimNo; d++) {
@@ -133,8 +120,30 @@ schemaCallback(SchemaList, [standardConnection]);
 };
 
 myConnector.getData = function(table, doneCallback) {
+formObj = JSON.parse(tableau.connectionData);
+var Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
+  function callback_Eurostat(response) {
+		EurostatData =response;
+//		TableName = formObj.TableCode+": "+response.label;
+		MetaData=JSONstat(response);
+		DimNo=response.id.length;
+		for (var i = 0; i < DimNo; i++) {
+		Dim_id[i]="DIM"+i+"_id";
+		Dim_id_eng[i] = "DIM"+i+"_eng";
+		Dim_id_est[i] = "DIM"+i+"_est";
+		Dim_name_eng[i] = EurostatData.id[i];
+		Dim_name_est[i] = EurostatData.id[i]+"_est";		
+		}
+}
+jQuery.support.cors = true;
+$.ajax({
+  type: "GET", dataType: "json", async: false, url: Url_Eurostat, 
+	success: function(data){callback_Eurostat(data);},
+	error: function (jqXhr, textStatus, errorMessage) {TableName = "Error: "+errorMessage;}
+  }); 	
+
 let tableData = [];
-if (table.tableInfo.id !== TableCode) {
+if (table.tableInfo.id !== formObj.TableCode) {
 	for (var d = 0; d < DimNo; d++) {
 	if (table.tableInfo.id == Dim_id[d]) {
 		for (var i = 0, len = Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index).length; i < len; i++) {	 
@@ -157,7 +166,6 @@ if (table.tableInfo.id !== TableCode) {
 
 } else {
 
-//	let data =[{value: 114.806, time: "2020", geo: "EE", na_item: "B1GQ", unit: "CLV_I15"}, {value: 108.747, time: "2019", geo: "FI", na_item: "B1GQ", unit: "CLV_I15"}];
 	let data = MetaData.toTable({ type: "arrobj", content: "id" });
 	var c=0;
 	let TablePush = {};
@@ -183,24 +191,18 @@ if (table.tableInfo.id !== TableCode) {
     $(document).ready(function() {
         $("#submitButton").click(function() {
             var formObj = {
-                TableCode: $('#TC').val().trim(),
-                Filters: $('#F').val().trim()
+                DatasetCode: $('#DC').val().trim(),
+		TableCode: $('#DC').val().trim().split("?").shift()
+
             };
-
-
                 tableau.connectionData = JSON.stringify(formObj); // Use this variable to pass data to your getSchema and getData functions
-                tableau.connectionName = "TableName"; // This will be the data source name in Tableau
+
+  //              tableau.connectionName = TableName; // This will be the data source name in Tableau
                 tableau.submit(); // This sends the connector object to Tableau
     
         });
     });  
   
-/* myConnector.init = function(initCallback) {
-initCallback();
-tableau.connectionName = TableName;
-tableau.submit();
-	
-};*/
 	
 	
 })();
