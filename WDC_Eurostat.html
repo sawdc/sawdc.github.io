@@ -1,3 +1,4 @@
+
 <html>
 <head>
     <title>WDC_Eurostat</title>
@@ -17,14 +18,16 @@
     <div class="container container-table">
         <div class="row vertical-center-row">
             <div class="text-center col-md-4 col-md-offset-4">
-                <h2>Get Eurostat Data</h2>
-                <form>
+                <h2>Lae Eurostati andmed / Get Eurostat Data</h2>
+		              <form>
                     <div class="form-inline">
-                        <label for="TC" class="text-center">Table Code and Filters:</label>
-				    </div>
+							    </div>
 				    <div class="form-inline">
-				        <input type="text" class="form-control" id="TC" value="nama_10_gdp">
-				        <input type="text" class="form-control" id="F" value="na_item=B1GQ&sinceTimePeriod=2015&precision=1&geo=EE&geo=FI&geo=LV&unit=CLV_I15&unitLabel=label">
+                        		<label for="DC">Andmepäringu kood / Dataset code:</label>					
+					<textarea id="DC" name="DC" rows="4" cols="75">
+  					  nama_10_gdp?na_item=B1GQ&sinceTimePeriod=2015&precision=1&geo=EE&geo=FI&geo=LV&unit=CLV_I15&unitLabel=label
+					  </textarea>
+					<p><a href="https://ec.europa.eu/eurostat/web/json-and-unicode-web-services/getting-started/query-builder" target="_blank">Kasuta päringu generaatorit / Use Query Builder to generate the Dataset code</a></p>  
 				    </div>
 				</form>
                 <button type = "button" id = "submitButton" class = "btn btn-success" style = "margin: 10px;">Lae andmed! Get Data!</button>
@@ -32,4 +35,5 @@
         </div>
     </div>
 </body>
+</html>
 </html>
