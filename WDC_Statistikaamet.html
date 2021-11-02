@@ -1,7 +1,7 @@
 <html>
 <head>
-    <title>Stat.ee Tableau WDC with translation</title> <!--Two last characters in the end of the file name are language codes. Translation with Neurotõlge API from Estoniat to:
-	(en), de, lv, lt, fi, ru. NB! Data in English will be pulled by default, using it additionally as language parameter may cause multiple entries for column names. -->
+    <title>Stat.ee Tableau WDC with translation</title> <!--Translation with Neurotõlge API from Estoniat to:
+	de, lv, lt, fi, ru. Data in English will be pulled by default. -->
 
     <meta http-equiv="Cache-Control" content="no-store" />  
 
@@ -10,7 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>   
     <script src="https://connectors.tableau.com/libs/tableauwdc-2.3.latest.js" type="text/javascript"></script>
-    	<p id="Start">2010</p> <!--Start year for getting data. If empty, then all data is pulled.-->
+
 	<script src="WDC_Statistikaamet.js" type="text/javascript"></script>
 </head>
   
@@ -20,24 +20,22 @@
             <div class="text-center col-md-4 col-md-offset-4">
                 <h2>Lae Statistikaameti andmed / Get Statistics Estonia Data</h2>
 		              <form>
-                    <div class="form-inline">
-							    </div>
 				    <div class="form-inline">
-                <label for="DT">Andmetabeli kood / Datatable code:</label>					
-				        <input type="text" class="form-control" id="DT" value="IA001">
-                <label for="Y">Algusaasta / Start year:</label>		                
-				        <input type="text" class="form-control" id="Y" name="Y" value="2010">
-                <label for="L">Lisakeel (valikuline) / Additional language (optional):</label>
-					    <select id="L" name="language">
-  <option value="none"></option>
-  <option value="fi">Soome/Finnish</option>
-  <option value="de">Saksa/German</option>
-  <option value="ru">Vene/Russian</option>
-  <option value="lv">Läti/Latvian</option>
-  <option value="lt">Leedu/Lihtuanian</option>						    
-</select>
+                				<label for="DT">Andmetabeli kood / Datatable code:</label>					
+				        	<input type="text" class="form-control" id="DT" name="DT" value="IA001">
+                				<label for="Y">Algusaasta / Start year:</label>		                
+				        	<input type="text" class="form-control" id="Y" name="Y" value="2010">
+                				<label for="L">Lisakeel (valikuline) / Additional language (optional):</label>
+					    		<select id="L" name="L">
+								  <option value="none"></option>
+								  <option value="fi">Soome/Finnish</option>
+								  <option value="de">Saksa/German</option>
+								  <option value="ru">Vene/Russian</option>
+								  <option value="lv">Läti/Latvian</option>
+								  <option value="lt">Leedu/Lihtuanian</option>						    
+							</select>
           
-									    </div>
+					</div>
 				</form>
                 <button type = "button" id = "submitButton" class = "btn btn-success" style = "margin: 10px;">Lae andmed! Get Data!</button>
             </div>
