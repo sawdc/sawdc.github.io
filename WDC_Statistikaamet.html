@@ -23,12 +23,18 @@
                     <div class="form-inline">
 							    </div>
 				    <div class="form-inline">
-                <label for="DT">Andmtabeli kood / Datatable code:</label>					
+                <label for="DT">Andmetabeli kood / Datatable code:</label>					
 				        <input type="text" class="form-control" id="DT" value="IA001">
                 <label for="Y">Algusaasta / Start year:</label>		                
-				        <input type="text" class="form-control" id="Y" value="2010">
-                <label for="L">Lisakeel (valikuline) / Additional language (optional):</label>		                
-				        <input type="text" class="form-control" id="L" value="">             
+				        <input type="text" class="form-control" id="Y" name="Y" value="2010">
+                <label for="L">Lisakeel (valikuline) / Additional language (optional):</label>
+					    <select id="L" name="language">
+  <option value="volvo">Volvo</option>
+  <option value="saab">Saab</option>
+  <option value="fiat">Fiat</option>
+  <option value="audi">Audi</option>
+</select>
+          
 									    </div>
 				</form>
                 <button type = "button" id = "submitButton" class = "btn btn-success" style = "margin: 10px;">Lae andmed! Get Data!</button>
