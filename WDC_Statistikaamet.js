@@ -2,10 +2,10 @@
     // Create the connector object
     var myConnector = tableau.makeConnector();
 
-	//var TableCode = window.location.pathname.split("/").pop().split(".").shift().split("_").shift(); //Get html file name and use it for TableCode
-	//var language = window.location.pathname.split("/").pop().split(".").shift().split("_").pop(); //Get html file name and use it for language
-//	Url = "https://andmed.stat.ee/api/v1/et/stat/"+ TableCode; //metadata url
-//	Url_eng = "https://andmed.stat.ee/api/v1/en/stat/"+ TableCode;
+	var TableCode = "IA001";
+	var language = "ru";
+	Url = "https://andmed.stat.ee/api/v1/et/stat/"+ TableCode; //metadata url
+	Url_eng = "https://andmed.stat.ee/api/v1/en/stat/"+ TableCode;
 
 
 var TableName,
@@ -391,8 +391,8 @@ if (row_index > tableData.length) {
             };
                 tableau.connectionData = JSON.stringify(formObj); // Use this variable to pass data to your getSchema and getData functions
 
-            Url = "https://andmed.stat.ee/api/v1/et/stat/"+ formObj.TableCode; //metadata url
-	          Url_eng = "https://andmed.stat.ee/api/v1/en/stat/"+ formObj.TableCode;
+            	Url = "https://andmed.stat.ee/api/v1/et/stat/"+ formObj.TableCode; //metadata url
+	        Url_eng = "https://andmed.stat.ee/api/v1/en/stat/"+ formObj.TableCode;
           
                 tableau.connectionName = formObj.TableCode;//TableName; // This will be the data source name in Tableau
                 tableau.submit(); // This sends the connector object to Tableau
