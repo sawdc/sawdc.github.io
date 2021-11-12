@@ -87,7 +87,6 @@ $.ajax({
 myConnector.init = function(initCallback){
    tableau.connectionName = TableName; // This will be the data source name in Tableau - works correctly only in Simulator therefore in event listener simpler name
    initCallback();
-	tableau.submit();
 };	
 	
 console.log("Number of Rows:", CellsNo);
