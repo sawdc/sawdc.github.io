@@ -85,7 +85,7 @@ $.ajax({
   });
 
 myConnector.init = function(initCallback){
-   tableau.connectionName = TableName; // This will be the data source name in Tableau
+   tableau.connectionName = TableName; // This will be the data source name in Tableau - works correctly only in Simulator therefore in event listener simpler name
    initCallback();
 };	
 	
@@ -418,7 +418,8 @@ if (row_index > tableData.length) {
 
             };
                 tableau.connectionData = JSON.stringify(formObj); // Use this variable to pass data to your getSchema and getData functions  	
-                tableau.submit(); // This sends the connector object to Tableau
+		tableau.connectionName = TableCode;
+		tableau.submit(); // This sends the connector object to Tableau
     
         });
     });
