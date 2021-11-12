@@ -419,7 +419,7 @@ if (row_index > tableData.length) {
 
             };
                 tableau.connectionData = JSON.stringify(formObj); // Use this variable to pass data to your getSchema and getData functions  	
-		tableau.connectionName = formObj.TableCode;
+//		tableau.connectionName = formObj.TableCode;
 		tableau.submit(); // This sends the connector object to Tableau
     
         });
