@@ -84,7 +84,11 @@ $.ajax({
        callback_est(data);}
   });
 
-tableau.connectionName = TableName; // This will be the data source name in Tableau
+myConnector.init = function(initCallback){
+   tableau.connectionName = TableName; // This will be the data source name in Tableau
+   initCallback();
+};	
+	
 console.log("Number of Rows:", CellsNo);
 
  function callback_eng(response) {
