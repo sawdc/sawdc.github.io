@@ -46,12 +46,12 @@ if (MetaData_est.variables[i].code !== "Aasta" && MetaData_est.variables[i].code
 	DimAasta=i; 
 	if (MetaData_est.variables[i].values[response.variables[i].values.length-1] - Math.max(StartYear, MetaData_est.variables[i].values[0]) > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].values[response.variables[i].values.length-1] - Math.max(StartYear, MetaData_est.variables[i].values[0])};
 } else if (MetaData_est.variables[i].code == "Vaatlusperiood") {
-		for (var j = 0; j < MetaData_est.variables[i].values[response.variables[i].values.length]; j++) {
+		for (var j = 0; j < MetaData_est.variables[i].values.length; j++) {
           		if (MetaData_est.variables[i].values[j].substring(0,4) == MetaData_est.variables[i].values[0].substring(0,4)) {RefPerNo=RefPerNo+1;}
-         	};
-	CellsNo=CellsNo*(MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-Math.max(StartYear, MetaData_est.variables[i].values[0]))*RefPerNo);
+        	};
+	CellsNo=CellsNo*(MetaData_est.variables[i].values.length - (Math.max(formObj.StartYear, MetaData_est.variables[i].values[0])-MetaData_est.variables[i].values[0].substring(0,4))*RefPerNo);
 	DimAasta=i; 
-	if (MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-Math.max(StartYear, MetaData_est.variables[i].values[0]))*RefPerNo > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].length - (MetaData_est.variables[i].values[response.variables[i].values.length-1].substring(0,4)-Math.max(StartYear, MetaData_est.variables[i].values[0]))*RefPerNo};
+	if (MetaData_est.variables[i].values.length - (Math.max(formObj.StartYear, MetaData_est.variables[i].values[0])-MetaData_est.variables[i].values[0].substring(0,4))*RefPerNo > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].values.length - (Math.max(formObj.StartYear, MetaData_est.variables[i].values[0])-MetaData_est.variables[i].values[0].substring(0,4))*RefPerNo};
 		};
 	}
 	if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1].substring(0,4)<StartYear) {
@@ -177,7 +177,7 @@ function processData(tableData, resp) {
             // Iterate over the JSON object
 	for (var i = 0, len = resp.data.length; i < len; i++) {
 		r=r+1;
-		console.log (CellsNo, r);
+		console.log ("Row", r, "of", CellsNo);
 		window.r=r;
 		var TablePush = {};
 		for (var d = 0; d < DimNo; d++) {
