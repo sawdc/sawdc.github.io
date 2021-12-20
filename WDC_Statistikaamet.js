@@ -301,8 +301,8 @@ if (MetaData_est.variables[d].code == "Aasta" || MetaData_est.variables[d].code 
 
 var PostQueryAll=('{"query":'+JSON.stringify(QueryAll)+',"response":'+JSON.stringify({"format":"json"})+"}");
 
-
-
+//Define POST query for filtered data
+var PostQueryFilter=('{"query":'+JSON.stringify(formObj.Filter)+',"response":'+JSON.stringify({"format":"json"})+"}");
 
 if (table.tableInfo.id !== formObj.TableCode) {
 for (var d = 0; d < DimNo; d++) {
@@ -339,7 +339,22 @@ if (formObj.language != "none") {
 } 
 }
 
- } else if (CellsNo<=MaxCells) {//In case of smaller tables get all data at once, else slice it by dimension with the highest number of values. Max no of cells limit 1 000 000 per query.
+ } else if (formObj.Filter !==null && formObj.Filter !=='') {//If filter is applyed query only filtered data.
+//console.time("TimerAll"); //Start timer
+$.ajax({type: "POST", url: Url, data: PostQueryFilter, dataType: "json",
+ success: function(resp) {
+	processData(tableData, resp);	
+ 	table.appendRows(tableData);
+//	chunkData(table, tableData);
+ 	doneCallback();
+//	console.timeEnd("TimerAll");          
+        },
+ error: function(xhr, textStatus, errorThrown) {
+	alert("Error "+xhr.status+" ("+errorThrown+").");
+ }
+});
+
+} else if (CellsNo<=MaxCells) {//In case of smaller tables get all data at once, else slice it by dimension with the highest number of values. Max no of cells limit 1 000 000 per query.
 //console.time("TimerAll"); //Start timer
 $.ajax({type: "POST", url: Url, data: PostQueryAll, dataType: "json",
  success: function(resp) {
@@ -411,6 +426,7 @@ if (row_index > tableData.length) {
             var formObj = {
                 TableCode: $('#TC').val().trim(),
                 StartYear: $('#Y').val().trim(),
+                Filter: $('#F').val().trim(),		    
                 language: $('#L').val().trim()
 
             };
