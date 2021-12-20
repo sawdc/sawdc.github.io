@@ -303,6 +303,7 @@ var PostQueryAll=('{"query":'+JSON.stringify(QueryAll)+',"response":'+JSON.strin
 
 //Define POST query for filtered data
 var PostQueryFilter=formObj.Filter;
+if (PostQueryFilter.includes('"format": "json-stat2"')) {PostQueryFilter=PostQueryFilter.replace('"format": "json-stat2"', '"format": "json"')};
 
 if (table.tableInfo.id !== formObj.TableCode) {
 for (var d = 0; d < DimNo; d++) {
