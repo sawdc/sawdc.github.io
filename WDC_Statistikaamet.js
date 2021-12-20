@@ -302,7 +302,7 @@ if (MetaData_est.variables[d].code == "Aasta" || MetaData_est.variables[d].code 
 var PostQueryAll=('{"query":'+JSON.stringify(QueryAll)+',"response":'+JSON.stringify({"format":"json"})+"}");
 
 //Define POST query for filtered data
-var PostQueryFilter=('{"query":'+JSON.stringify(formObj.Filter)+',"response":'+JSON.stringify({"format":"json"})+"}");
+var PostQueryFilter=formObj.Filter;
 
 if (table.tableInfo.id !== formObj.TableCode) {
 for (var d = 0; d < DimNo; d++) {
