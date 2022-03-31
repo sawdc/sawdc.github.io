@@ -129,9 +129,9 @@ if (table.tableInfo.id !== TableCode) {
 		var TablePush = {}; // {} will create an object
 		Dim_value = Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index)[i]; 
 		Dim_eng = EurostatData.dimension[Dim_name_eng[d]].category.label[Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index)[i]];
-		translate(Dim_eng);
-		Dim_est = translate_output;
-		TablePush[Dim_id_est[d]]=Dim_est;
+		//translate(Dim_eng);
+		//Dim_est = translate_output;
+		//TablePush[Dim_id_est[d]]=Dim_est;
 		TablePush[Dim_id[d]] = Dim_value;
 		TablePush[Dim_id_eng[d]]=Dim_eng;
 		tableData.push(TablePush);		
