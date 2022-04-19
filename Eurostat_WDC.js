@@ -17,7 +17,7 @@ var TableName,
 	Dim_name_est=[],
 	Dim_name_eng=[];
 	
-  function callback_Eurostat(response) {
+ /* function callback_Eurostat(response) {
 		EurostatData =response;
 		TableName = TableCode+": "+response.label;
 		MetaData=JSONstat(response);
@@ -36,7 +36,7 @@ $.ajax({
   type: "GET", dataType: "json", async: false, url: Url_Eurostat, 
 	success: function(data){callback_Eurostat(data);},
 	error: function (jqXhr, textStatus, errorMessage) {TableName = "mingi jama: "+errorMessage;}
-  }); 	
+  }); 	*/
 
 function translate(input_text) {function callback_translate(response) {
 		translate_output=response.result;};
@@ -53,9 +53,31 @@ function translate(input_text) {function callback_translate(response) {
 	
    // Define the schema
 myConnector.getSchema = function(schemaCallback) {
+formObj = JSON.parse(tableau.connectionData);
+var Url = "http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
 
+fetch(Url)
+  .then(response => response.json())
+  .then(data => {EurostatData=data;
+		TableName = formObj.TableCode+": "+data.label;
+		tableau.connectionName = TableName;
+		MetaData=JSONstat(data);
+		DimNo=EurostatData.id.length;
+		for (var i = 0; i < DimNo; i++) {
+		Dim_id[i]="DIM"+i+"_id";
+		Dim_id_eng[i] = "DIM"+i+"_eng";
+		Dim_id_est[i] = "DIM"+i+"_est";
+		Dim_name_eng[i] = EurostatData.id[i];
+		Dim_name_est[i] = EurostatData.id[i]+"_est"
+		}
+
+})
+.then(GetSchema)
+.catch(err => console.error(err));
+	
 var SchemaList=[];
 // Define dimensions
+function GetSchema() {
 for (var d = 0; d < DimNo; d++) {   
     var DIMcols = [{
             id: Dim_id[d],
@@ -118,6 +140,7 @@ var standardConnection ={"alias": "Joined data", "tables": [{
 	}
 
 schemaCallback(SchemaList, [standardConnection]);
+}
 };
 
 myConnector.getData = function(table, doneCallback) {
