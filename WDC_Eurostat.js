@@ -34,7 +34,7 @@ var Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v
   function callback_Eurostat(response) {
 		EurostatData =response;
 		TableName = formObj.TableCode+": "+response.label;
-		MetaData=JSONstat(response);
+//		MetaData=JSONstat(response);
 		DimNo=response.id.length;
 		for (var i = 0; i < DimNo; i++) {
 		Dim_id[i]="DIM"+i+"_id";
@@ -120,7 +120,6 @@ schemaCallback(SchemaList, [standardConnection]);
 };
 
 myConnector.getData = function(table, doneCallback) {
-//kordus
 formObj = JSON.parse(tableau.connectionData);
 var Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
   function callback_Eurostat(response) {
@@ -142,7 +141,7 @@ $.ajax({
 	success: function(data){callback_Eurostat(data);},
 	error: function (jqXhr, textStatus, errorMessage) {TableName = "Error: "+errorMessage;}
   }); 	
-//korduse lõpp
+
 let tableData = [];
 if (table.tableInfo.id !== formObj.TableCode) {
 	for (var d = 0; d < DimNo; d++) {
@@ -151,11 +150,11 @@ if (table.tableInfo.id !== formObj.TableCode) {
 		var TablePush = {}; // {} will create an object
 		Dim_value = Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index)[i]; 
 		Dim_eng = EurostatData.dimension[Dim_name_eng[d]].category.label[Object.keys(EurostatData.dimension[Dim_name_eng[d]].category.index)[i]];
-		TablePush[Dim_id[d]] = Dim_value;
-		TablePush[Dim_id_eng[d]]=Dim_eng;		
 		translate(Dim_eng);
 		Dim_est = translate_output;
 		TablePush[Dim_id_est[d]]=Dim_est;
+		TablePush[Dim_id[d]] = Dim_value;
+		TablePush[Dim_id_eng[d]]=Dim_eng;
 		tableData.push(TablePush);		
 
 		}	
