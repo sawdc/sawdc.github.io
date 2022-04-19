@@ -28,7 +28,7 @@ function translate(input_text) {function callback_translate(response) {
 };	
 	
    // Define the schema
-myConnector.getSchema = function(schemaCallback) {
+/*myConnector.getSchema = function(schemaCallback) {
 formObj = JSON.parse(tableau.connectionData);
 var Url = "http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
 	
@@ -125,8 +125,8 @@ schemaCallback(SchemaList, [standardConnection]);
 
 };
 	
-	
-	/*myConnector.getSchema = function(schemaCallback) {
+*/	
+myConnector.getSchema = function(schemaCallback) {
 formObj = JSON.parse(tableau.connectionData);
 var Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
   function callback_Eurostat(response) {
@@ -216,7 +216,7 @@ var standardConnection ={"alias": "Joined data", "tables": [{
 
 schemaCallback(SchemaList, [standardConnection]);
 };
-*/
+
 myConnector.getData = function(table, doneCallback) {
 
 let tableData = [];
