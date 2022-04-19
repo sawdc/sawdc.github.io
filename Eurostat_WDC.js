@@ -77,7 +77,7 @@ fetch(Url)
 */	
 var SchemaList=[];
 // Define dimensions
-function GetSchema() {
+//function GetSchema() {
 for (var d = 0; d < DimNo; d++) {   
     var DIMcols = [{
             id: Dim_id[d],
