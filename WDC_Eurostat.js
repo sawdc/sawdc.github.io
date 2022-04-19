@@ -120,7 +120,8 @@ schemaCallback(SchemaList, [standardConnection]);
 };
 
 myConnector.getData = function(table, doneCallback) {
-/*formObj = JSON.parse(tableau.connectionData);
+//kordus
+formObj = JSON.parse(tableau.connectionData);
 var Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
   function callback_Eurostat(response) {
 		EurostatData =response;
@@ -140,8 +141,8 @@ $.ajax({
   type: "GET", dataType: "json", async: false, url: Url_Eurostat, 
 	success: function(data){callback_Eurostat(data);},
 	error: function (jqXhr, textStatus, errorMessage) {TableName = "Error: "+errorMessage;}
-  }); 	*/
-
+  }); 	
+//korduse lõpp
 let tableData = [];
 if (table.tableInfo.id !== formObj.TableCode) {
 	for (var d = 0; d < DimNo; d++) {
