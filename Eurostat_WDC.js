@@ -17,7 +17,7 @@ var TableName,
 	Dim_name_est=[],
 	Dim_name_eng=[];
 	
- /* function callback_Eurostat(response) {
+  function callback_Eurostat(response) {
 		EurostatData =response;
 		TableName = TableCode+": "+response.label;
 		MetaData=JSONstat(response);
@@ -36,7 +36,7 @@ $.ajax({
   type: "GET", dataType: "json", async: false, url: Url_Eurostat, 
 	success: function(data){callback_Eurostat(data);},
 	error: function (jqXhr, textStatus, errorMessage) {TableName = "mingi jama: "+errorMessage;}
-  }); 	*/
+  }); 	
 
 function translate(input_text) {function callback_translate(response) {
 		translate_output=response.result;};
@@ -45,7 +45,7 @@ function translate(input_text) {function callback_translate(response) {
 			headers: {'Content-Type': 'application/json',
 			'application': 'MKM Tableau WDC'},
 			url: 'https://api.tartunlp.ai/translation/v2',
-			data: JSON.stringify({text: input_text, src: "en", tgt: "et", domain: "fml"}),
+			data: JSON.stringify({text: input_text, src: "en", tgt: "et"}),
 			dataType: "json",
  			success: function(resp) {callback_translate(resp);} 
 			});
@@ -53,7 +53,7 @@ function translate(input_text) {function callback_translate(response) {
 	
    // Define the schema
 myConnector.getSchema = function(schemaCallback) {
-formObj = JSON.parse(tableau.connectionData);
+/*formObj = JSON.parse(tableau.connectionData);
 var Url = "http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
 
 fetch(Url)
@@ -74,7 +74,7 @@ fetch(Url)
 })
 .then(GetSchema)
 .catch(err => console.error(err));
-	
+*/	
 var SchemaList=[];
 // Define dimensions
 function GetSchema() {
@@ -140,7 +140,7 @@ var standardConnection ={"alias": "Joined data", "tables": [{
 	}
 
 schemaCallback(SchemaList, [standardConnection]);
-}
+//}
 };
 
 myConnector.getData = function(table, doneCallback) {
