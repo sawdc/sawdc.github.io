@@ -30,6 +30,104 @@ function translate(input_text) {function callback_translate(response) {
    // Define the schema
 myConnector.getSchema = function(schemaCallback) {
 formObj = JSON.parse(tableau.connectionData);
+var Url = "http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
+	
+//tableau.connectionName = TableName;
+
+fetch(Url)
+  .then(response => response.json())
+  .then(data => {EurostatData=data;
+		TableName = formObj.TableCode+": "+data.label;
+		tableau.connectionName = TableName;
+		MetaData=JSONstat(data);
+		DimNo=EurostatData.id.length;
+		for (var i = 0; i < DimNo; i++) {
+		Dim_id[i]="DIM"+i+"_id";
+		Dim_id_eng[i] = "DIM"+i+"_eng";
+		Dim_id_est[i] = "DIM"+i+"_est";
+		Dim_name_eng[i] = EurostatData.id[i];
+		Dim_name_est[i] = EurostatData.id[i]+"_est"
+		}
+
+})
+.then(GetSchema)
+.catch(err => console.error(err));
+
+
+
+var SchemaList=[];
+// Define dimensions
+function GetSchema() {
+for (var d = 0; d < DimNo; d++) {   
+    var DIMcols = [{
+            id: Dim_id[d],
+            alias: Dim_id[d],
+            dataType: tableau.dataTypeEnum.string},
+      	{id: Dim_id_eng[d],
+            alias: Dim_name_eng[d],
+            dataType: tableau.dataTypeEnum.string},
+	{id: Dim_id_est[d],
+            alias: Dim_name_est[d],
+            dataType: tableau.dataTypeEnum.string} 
+	];
+
+        DIM_Schema[d]= {
+            id: Dim_id[d],
+            alias: Dim_name_eng[d],
+            columns: DIMcols
+        };
+}
+	for (var d = 0; d < DimNo; d++) {
+	SchemaList.push(DIM_Schema[d]);
+	}
+
+// Define datatable
+	var cols_DataTable=[];
+	for (var d = 0; d < DimNo; d++) {
+	cols_DataTable.push({
+            id: Dim_id[d],
+            alias: Dim_id[d],
+            dataType: tableau.dataTypeEnum.string});
+	}
+	cols_DataTable.push({id: "obs",
+            alias: "observation",
+            dataType: tableau.dataTypeEnum.float});
+
+        var DataTableSchema = {
+            id: formObj.TableCode,
+            alias: "Datatable",
+            columns: cols_DataTable
+        };
+SchemaList.push(DataTableSchema);
+
+//Define joins
+var standardConnection ={"alias": "Joined data", "tables": [{
+        "id": formObj.TableCode,
+        "alias": "Datatable"
+    }], "joins":[]};
+	for (var d = 0; d < DimNo; d++) {
+	standardConnection.tables.push({
+        "id": Dim_id[d],
+        "alias": Dim_name_eng[d]
+	});
+	standardConnection.joins.push({"left": {
+        "tableAlias": "Datatable",
+        "columnId": Dim_id[d]
+        }, "right": {"tableAlias": Dim_name_eng[d],
+        "columnId": Dim_id[d]
+	},
+        "joinType": "inner"});
+	}
+
+schemaCallback(SchemaList, [standardConnection]);
+
+}
+
+};
+	
+	
+	/*myConnector.getSchema = function(schemaCallback) {
+formObj = JSON.parse(tableau.connectionData);
 var Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
   function callback_Eurostat(response) {
 		EurostatData =response;
@@ -118,30 +216,8 @@ var standardConnection ={"alias": "Joined data", "tables": [{
 
 schemaCallback(SchemaList, [standardConnection]);
 };
-
+*/
 myConnector.getData = function(table, doneCallback) {
-/*formObj = JSON.parse(tableau.connectionData);
-var Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
-  function callback_Eurostat(response) {
-		EurostatData =response;
-//		TableName = formObj.TableCode+": "+response.label;
-		MetaData=JSONstat(response);
-		DimNo=response.id.length;
-		for (var i = 0; i < DimNo; i++) {
-		Dim_id[i]="DIM"+i+"_id";
-		Dim_id_eng[i] = "DIM"+i+"_eng";
-		Dim_id_est[i] = "DIM"+i+"_est";
-		Dim_name_eng[i] = EurostatData.id[i];
-		Dim_name_est[i] = EurostatData.id[i]+"_est";		
-		}
-}
-jQuery.support.cors = true;
-$.ajax({
-  type: "GET", dataType: "json", async: false, url: Url_Eurostat, 
-	success: function(data){callback_Eurostat(data);},
-	error: function (jqXhr, textStatus, errorMessage) {TableName = "Error: "+errorMessage;}
-  }); 	*/
-
 let tableData = [];
 if (table.tableInfo.id !== formObj.TableCode) {
 	for (var d = 0; d < DimNo; d++) {
