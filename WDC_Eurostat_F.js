@@ -30,7 +30,7 @@ function translate(input_text) {function callback_translate(response) {
    // Define the schema
 myConnector.getSchema = function(schemaCallback) {
 formObj = JSON.parse(tableau.connectionData);
-var Url = "http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
+var Url = "https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+formObj.DatasetCode;
 	
 //tableau.connectionName = TableName;
 
