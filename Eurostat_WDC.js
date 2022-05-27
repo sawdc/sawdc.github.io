@@ -4,7 +4,7 @@
 
 	var TableCode = window.location.pathname.split("/").pop().split(".").shift(); //Get html file name and use it for TableCode
 	var Filters=document.getElementById("Filters").innerText; //Get Filters from html file
-	Url_Eurostat = "http://localhost:8889/ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+TableCode+"?"+Filters;
+	Url_Eurostat = "https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/"+TableCode+"?"+Filters;
 
 var TableName,
 	DimNo, //Number of dimensions
