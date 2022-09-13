@@ -42,7 +42,7 @@ if (pattern1.test(Filters)) {Filters=Filters.replace(pattern1, "")};
 if (pattern2.test(Filters)) {Filters=Filters.replace(pattern2, "")};
 if (pattern3.test(Filters)) {Filters=Filters.replace(/(\Period=\d{4})/, "$1" + "-")};
 if (pattern4.test(Filters)) {Filters=Filters.replace(pattern4, pattern4.exec(Filters)[0]).replace("D", "-")};
-if (pattern5.test(Filters)) {Filters=Filters.replace(pattern5, pattern5.exec(Filters)[0]).replace("M", "-")};
+if (pattern5.test(Filters)) {var abi=pattern5.exec(Filters)[0]; Filters=Filters.replace(pattern5, abi.replace("M", "-"))};
 
 
 var Url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/"+Filters;
