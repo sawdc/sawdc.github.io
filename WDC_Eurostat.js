@@ -38,11 +38,17 @@ let pattern2=/(\&unitLabel=\w*)/;
 let pattern3=/(\Period=\d{4}(S|Q))/;
 let pattern4=/(\Period=\d{4}M\d{2}D\d{2})/;
 let pattern5=/(\Period=\d{4}M\d{2})/;
+let pattern6=/(\&groupedIndicators=\d*)/;
+let pattern7=/(\&filterNonGeo=\d*)/;
+let pattern8=/(\&shortLabel=\d*)/;
 if (pattern1.test(Filters)) {Filters=Filters.replace(pattern1, "")};
 if (pattern2.test(Filters)) {Filters=Filters.replace(pattern2, "")};
+if (pattern6.test(Filters)) {Filters=Filters.replace(pattern6, "")};
+if (pattern7.test(Filters)) {Filters=Filters.replace(pattern7, "")};
+if (pattern8.test(Filters)) {Filters=Filters.replace(pattern8, "")};
 if (pattern3.test(Filters)) {Filters=Filters.replace(/(\Period=\d{4})/, "$1" + "-")};
-if (pattern4.test(Filters)) {Filters=Filters.replace(pattern4, pattern4.exec(Filters)[0]).replace("D", "-")};
-if (pattern5.test(Filters)) {var abi=pattern5.exec(Filters)[0]; Filters=Filters.replace(pattern5, abi.replace("M", "-"))};
+if (pattern4.test(Filters)) {var abi4=pattern5.exec(Filters)[0]; Filters=Filters.replace(pattern4, abi4.replace("D", "-"))};
+if (pattern5.test(Filters)) {var abi5=pattern5.exec(Filters)[0]; Filters=Filters.replace(pattern5, abi5.replace("M", "-"))};
 
 
 var Url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/"+Filters;
