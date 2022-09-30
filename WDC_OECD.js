@@ -31,7 +31,8 @@ function translate(input_text) {function callback_translate(response) {
 myConnector.getSchema = function(schemaCallback) {
 formObj = JSON.parse(tableau.connectionData);
 var Url = formObj.url;
-
+tableau.connectionName = TableName;
+	
 fetch(Url)
   .then(response => response.json())
   .then(data => {OECDData=data;
