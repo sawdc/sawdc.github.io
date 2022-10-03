@@ -31,13 +31,13 @@ function translate(input_text) {function callback_translate(response) {
 myConnector.getSchema = function(schemaCallback) {
 formObj = JSON.parse(tableau.connectionData);
 var Url = formObj.url;
-tableau.connectionName = formObj.TableCode;
+tableau.connectionName = "pealkiri";//formObj.TableCode;
 	
 fetch(Url)
   .then(response => response.json())
   .then(data => {OECDData=data;
 			TableName = formObj.TableCode+": "+data.structure.name;
-		tableau.connectionName = TableName;
+//		tableau.connectionName = TableName;
 		Metadata=data.structure.dimensions.observation;
 		Data=JSONstat(data.dataSets[0].observations);
 		DimNo=Metadata.length;
