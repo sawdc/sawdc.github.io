@@ -176,10 +176,10 @@ tableData.push(TablePush);
         $("#submitButton").click(function() {        
 var formObj = {
                 url: $('#url').val().trim(),
-		TableCode: $('#url').val().trim().split("/").slice(5,6)
+		TableCode: $('#url').val().trim()//.split("/").slice(5,6)
              };
                 tableau.connectionData = JSON.stringify(formObj); // Use this variable to pass data to your getSchema and getData functions
-                tableau.connectionName = "1"+formObj.url;// This will be the data source name in Tableau
+                tableau.connectionName = "2"+formObj.TableCode;// This will be the data source name in Tableau
                 tableau.submit(); // This sends the connector object to Tableau
     
         });
