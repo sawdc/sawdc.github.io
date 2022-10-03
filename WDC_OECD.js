@@ -180,7 +180,7 @@ var formObj = {
              };
                 tableau.connectionData = JSON.stringify(formObj); // Use this variable to pass data to your getSchema and getData functions
 window.alert(formObj);
-                tableau.connectionName = "pealkiri1";formObj.TableCode;// This will be the data source name in Tableau
+                tableau.connectionName = "pealkiri2";formObj.TableCode;// This will be the data source name in Tableau
                 tableau.submit(); // This sends the connector object to Tableau
     
         });
