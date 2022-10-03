@@ -31,13 +31,12 @@ function translate(input_text) {function callback_translate(response) {
 myConnector.getSchema = function(schemaCallback) {
 formObj = JSON.parse(tableau.connectionData);
 var Url = formObj.url;
-tableau.connectionName = formObj.TableCode;
 	
 fetch(Url)
   .then(response => response.json())
   .then(data => {OECDData=data;
 			TableName = formObj.TableCode+": "+data.structure.name;
-//		tableau.connectionName = TableName;
+		tableau.connectionName = TableName;
 		Metadata=data.structure.dimensions.observation;
 		Data=JSONstat(data.dataSets[0].observations);
 		DimNo=Metadata.length;
@@ -176,10 +175,10 @@ tableData.push(TablePush);
         $("#submitButton").click(function() {        
 var formObj = {
                 url: $('#url').val().trim(),
-		TableCode: $('#url').val().trim().split('/').slice(5,6)
+		TableCode: "1"+$('#url').val().trim().split('/').slice(5,6)
              };
                 tableau.connectionData = JSON.stringify(formObj); // Use this variable to pass data to your getSchema and getData functions
-                tableau.connectionName = ""+formObj.TableCode;// This will be the data source name in Tableau
+                tableau.connectionName = formObj.TableCode;// This will be the data source name in Tableau
                 tableau.submit(); // This sends the connector object to Tableau
     
         });
