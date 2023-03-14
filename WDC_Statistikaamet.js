@@ -39,8 +39,14 @@ function translate(input_text, lang) {function callback_translate(response) {
 myConnector.getSchema = function(schemaCallback) {
 
 		formObj = JSON.parse(tableau.connectionData);
+	if formObj.TableCode.substring(0, 2)=="VK") { //new database for foreign trade statistics
+		Url = "https://andmed.stat.ee/api/v1/et/statsql/"+ formObj.TableCode; //metadata url
+	        Url_eng = "https://andmed.stat.ee/api/v1/en/statsql/"+ formObj.TableCode; //metadata url for dimensions in English		
+		
+	} else {
 		Url = "https://andmed.stat.ee/api/v1/et/stat/"+ formObj.TableCode; //metadata url
 	        Url_eng = "https://andmed.stat.ee/api/v1/en/stat/"+ formObj.TableCode; //metadata url for dimensions in English
+	};
 
 
 function callback_est(response) {
