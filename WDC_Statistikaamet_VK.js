@@ -20,7 +20,8 @@ var TableName,
 	Dim_max_value="",
 	Dim_name_est=[],
 	Dim_name_eng=[],
-	Dim_name_lang=[];
+	Dim_name_lang=[],
+    DimCode=[];
 const MaxCells = 1000000; //Max no of cells limit 1 000 000 per query. For better performance smaller amounts could be retrieved.
 
 function translate(input_text, lang) {function callback_translate(response) {
@@ -49,23 +50,32 @@ myConnector.getSchema = function(schemaCallback) {
 	        Url_eng = "https://andmed.stat.ee/api/v1/en/stat/"+ formObj.TableCode; //metadata url for dimensions in English
 	};
 
-
-function callback_est(response) {
-	MetaData_est =response;  //defining metadata
-	TableName = response.title;
-	DimNo = response.variables.length;
-    var d=0
+  fetch(Url)
+  .then(response => response.json())
+  .then(data => {MetaData_est=data;
+    return fetch(Url_eng);})
+    .then (response => response.json())
+    .then(data => {MetaData_eng=data;
+    TableName = MetaData_est.title;
+    DimNo=MetaData_est.variables.length;
+    var d=0;
     for (var i = 0; i < DimNo; i++) {
-        if (MetaData_est.variables[i].code != "ContentsCode") {
-        Dim_id[d] = "DIM"+d+"_id";
-		Dim_id_est[d]="DIM"+d+"_est";
-		Dim_name_est[d] = response.variables[i].text;
-
+    if (MetaData_est.variables[i].code != "ContentsCode") {
+    Dim_id[d]="DIM"+d+"_id";
+    Dim_id_eng[d] = "DIM"+d+"_eng";
+    Dim_id_est[d] = "DIM"+d+"_est";
+    DimCode[d]=MetaData_est.variables[i].code;
+    Dim_name_est[d] = MetaData_est.variables[i].text;
+    Dim_name_eng[d] = MetaData_eng.variables[i].text;
+    if (formObj.language != "none") {
+		Dim_id_lang[d]="DIM"+d+"_"+formObj.language;
+		translate(Dim_name_est[d], formObj.language);
+		Dim_name_lang[d] = translate_output;}	
 //Calculate the number of cells in the datatable and find the dimension with the largest number of variables
 if (MetaData_est.variables[i].code !== "Aasta" && MetaData_est.variables[i].code !== "Vaatlusperiood" && MetaData_est.variables[i].code !== "TIME") {
 	CellsNo=CellsNo*MetaData_est.variables[i].values.length;
 	if (MetaData_est.variables[i].values.length > Dim_max_length) {
-	Dim_max=i;
+	Dim_max=d;
 	Dim_max_length=MetaData_est.variables[i].values.length
 	};
 } else if (MetaData_est.variables[i].code == "Aasta") {
@@ -76,154 +86,131 @@ if (MetaData_est.variables[i].code !== "Aasta" && MetaData_est.variables[i].code
 		for (var j = 0; j < MetaData_est.variables[i].values.length; j++) {
           		if (MetaData_est.variables[i].values[j].substring(0,4) == MetaData_est.variables[i].values[0].substring(0,4)) {RefPerNo=RefPerNo+1;}
         	};
-	CellsNo=CellsNo*(MetaData_est.variables[i].values.length - (Math.max(formObj.StartYear, MetaData_est.variables[i].values[0])-MetaData_est.variables[i].values[0].substring(0,4))*RefPerNo);
-	DimAasta=i; 
+            CellsNo=CellsNo*(MetaData_est.variables[i].values.length - (Math.max(formObj.StartYear, MetaData_est.variables[i].values[0].substring(0,4))-MetaData_est.variables[i].values[0].substring(0,4))*RefPerNo);
+	DimAasta=i;
+    
 	if (MetaData_est.variables[i].values.length - (Math.max(formObj.StartYear, MetaData_est.variables[i].values[0])-MetaData_est.variables[i].values[0].substring(0,4))*RefPerNo > Dim_max_length) {Dim_max=i; Dim_max_length=MetaData_est.variables[i].values.length - (Math.max(formObj.StartYear, MetaData_est.variables[i].values[0])-MetaData_est.variables[i].values[0].substring(0,4))*RefPerNo};
 		};
 	
-        d=d+1;} else {DimCorr=-1};
-    }  
-	if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1].substring(0,4)<formObj.StartYear) {
+        d=d+1;} else {DimCorr=-1; };
+    
+    }
+	console.log("Number of Rows:", CellsNo);
+    if (MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1].substring(0,4)<formObj.StartYear) {
 		alert("Start year ("+formObj.StartYear+") is larger than last year in data table ("+MetaData_est.variables[DimAasta].values[MetaData_est.variables[DimAasta].values.length-1]+")! Do not fetch DataTable, WDC will crash!");
 	};
-}
 
+    apiPages = []; // Helper table for pulling data per page
+    for (var i = 0, len = MetaData_est.variables[Dim_max].values.length; i < len; i++) {	 
+   
+       if (MetaData_est.variables[Dim_max].code !== "Aasta" && MetaData_est.variables[Dim_max].code !== "Vaatlusperiood" && MetaData_est.variables[Dim_max].code !== "TIME") {
+           apiPages.push(MetaData_est.variables[Dim_max].values[i]);
+       } else if (MetaData_est.variables[Dim_max].code == "Aasta" && MetaData_est.variables[Dim_max].values[i] >= formObj.StartYear) {
+           apiPages.push(MetaData_est.variables[Dim_max].values[i]);
+       } else if (MetaData_est.variables[Dim_max].code == "Vaatlusperiood" && MetaData_est.variables[Dim_max].values[i].substring(0,4) >= formObj.StartYear) {
+           apiPages.push(MetaData_est.variables[Dim_max].values[i]);
+       } else if (MetaData_est.variables[Dim_max].code == "TIME" && MetaData_est.variables[Dim_max].values[i].substring(0,4) >= formObj.StartYear) {
+           apiPages.push(MetaData_est.variables[Dim_max].values[i]);
+       };
+   };
+           Years =[]; // Helper table for years to pull in case StartYear <>""
+    for (var i = 0, len = MetaData_est.variables[DimAasta].values.length; i < len; i++) {
+       if (MetaData_est.variables[DimAasta].values[i].substring(0,4) >= formObj.StartYear) {
+           Years.push(MetaData_est.variables[DimAasta].values[i]);
+       };
+   };
 
+})
+.then(GetSchema)
+.catch(err => console.error(err));
 
-$.ajax({
-  dataType: "json", async: false, url: Url, success: function(data){
-       callback_est(data);}
-  });
 
 tableau.connectionName = TableName; // This will be the data source name in Tableau - works only in Simulator therefore in event listener simpler name is used (Table code)
 	
-console.log("Number of Rows:", CellsNo);
+  var SchemaList=[];
+  // Define dimensions
+  function GetSchema() {
+  for (var d = 0; d < DimNo+DimCorr; d++) {   
+      if (formObj.language != "none") {
+      var DIMcols = [{
+              id: Dim_id[d],
+              alias: Dim_id[d],
+              dataType: tableau.dataTypeEnum.string},
+            {id: Dim_id_est[d],
+              alias: Dim_name_est[d],
+              dataType: tableau.dataTypeEnum.string},
+      {id: Dim_id_eng[d],
+              alias: Dim_name_eng[d],
+              dataType: tableau.dataTypeEnum.string},
+      {id: Dim_id_lang[d],
+              alias: Dim_name_lang[d],
+              dataType: tableau.dataTypeEnum.string}
+      ];
+  } else {
+      var DIMcols = [{
+              id: Dim_id[d],
+              alias: Dim_id[d],
+              dataType: tableau.dataTypeEnum.string},
+            {id: Dim_id_est[d],
+              alias: Dim_name_est[d],
+              dataType: tableau.dataTypeEnum.string},
+      {id: Dim_id_eng[d],
+              alias: Dim_name_eng[d],
+              dataType: tableau.dataTypeEnum.string}
+      ];
+  }
+  
+          DIM_Schema[d]= {
+              id: Dim_id_est[d],
+              alias: Dim_name_est[d],
+              columns: DIMcols
+          };
+  }
+      for (var d = 0; d < DimNo+DimCorr; d++) {
+      SchemaList.push(DIM_Schema[d]);
+      }
+  
+  // Define datatable
+      var cols_DataTable=[];
+      for (var d = 0; d < DimNo+DimCorr; d++) {
+      cols_DataTable.push({
+              id: Dim_id[d],
+              alias: Dim_id[d],
+              dataType: tableau.dataTypeEnum.string});
+      }
+      cols_DataTable.push({id: "obs",
+              alias: "observation",
+              dataType: tableau.dataTypeEnum.float});
+  
+          var DataTableSchema = {
+              id: formObj.TableCode,
+              alias: "Datatable",
+              columns: cols_DataTable
+          };
+  SchemaList.push(DataTableSchema);
+  
+  //Define joins
+  var standardConnection ={"alias": "Joined data", "tables": [{
+          "id": formObj.TableCode,
+          "alias": "Datatable"
+      }], "joins":[]};
+      for (var d = 0; d < DimNo+DimCorr; d++) {
+      standardConnection.tables.push({
+          "id": Dim_id_est[d],
+          "alias": Dim_name_est[d]
+      });
+      standardConnection.joins.push({"left": {
+          "tableAlias": "Datatable",
+          "columnId": Dim_id[d]
+          }, "right": {"tableAlias": Dim_name_est[d],
+          "columnId": Dim_id[d]
+      },
+          "joinType": "inner"});
+      }
+  schemaCallback(SchemaList, [standardConnection]);
+  };
+  //GetSchema();
 
- function callback_eng(response) {
-    var d=0;
-    MetaData_eng =response;
-     for (var i = 0; i < DimNo; i++) {
-        if (MetaData_eng.variables[i].code != "ContentsCode") {      
-		Dim_id_eng[d]="DIM"+d+"_eng";
-		Dim_name_eng[d] = response.variables[i].text;
-if (formObj.language != "none") {
-		Dim_id_lang[d]="DIM"+d+"_"+formObj.language;
-		translate(Dim_name_est[d], formObj.language);
-		Dim_name_lang[d] = translate_output;}		
-        d=d+1;} else {DimCorr=-1};		
-    
-    }
-		
-}
-
- $.ajax({
-  dataType: "json", async: false, url: Url_eng, success: function(data){
-       callback_eng(data);}
-  });
-
-
-
-		apiPages = []; // Helper table for pulling data per page
- for (var i = 0, len = MetaData_est.variables[Dim_max].values.length; i < len; i++) {	 
-
-	if (MetaData_est.variables[Dim_max].code !== "Aasta" && MetaData_est.variables[Dim_max].code !== "Vaatlusperiood" && MetaData_est.variables[d].code !== "TIME") {
-		apiPages.push(MetaData_est.variables[Dim_max].values[i]);
-	} else if (MetaData_est.variables[Dim_max].code == "Aasta" && MetaData_est.variables[Dim_max].values[i] >= formObj.StartYear) {
-		apiPages.push(MetaData_est.variables[Dim_max].values[i]);
-	} else if (MetaData_est.variables[Dim_max].code == "Vaatlusperiood" && MetaData_est.variables[Dim_max].values[i].substring(0,4) >= formObj.StartYear) {
-		apiPages.push(MetaData_est.variables[Dim_max].values[i]);
-	} else if (MetaData_est.variables[Dim_max].code == "TIME" && MetaData_est.variables[Dim_max].values[i].substring(0,4) >= formObj.StartYear) {
-		apiPages.push(MetaData_est.variables[Dim_max].values[i]);
-    };
-};
-		Years =[]; // Helper table for years to pull in case StartYear <>""
- for (var i = 0, len = MetaData_est.variables[DimAasta].values.length; i < len; i++) {
-	if (MetaData_est.variables[DimAasta].values[i].substring(0,4) >= formObj.StartYear) {
-		Years.push(MetaData_est.variables[DimAasta].values[i]);
-	};
-};
-
-
-var SchemaList=[];
-// Define dimensions
-for (var d = 0; d < DimNo+DimCorr; d++) {   
-if (formObj.language != "none") {
-    var DIMcols = [{
-            id: Dim_id[d],
-            alias: Dim_id[d],
-            dataType: tableau.dataTypeEnum.string},
-      	{id: Dim_id_est[d],
-            alias: Dim_name_est[d],
-            dataType: tableau.dataTypeEnum.string},
-	{id: Dim_id_eng[d],
-            alias: Dim_name_eng[d],
-            dataType: tableau.dataTypeEnum.string},
-	{id: Dim_id_lang[d],
-            alias: Dim_name_lang[d],
-            dataType: tableau.dataTypeEnum.string}
-	];
-} else {
-    var DIMcols = [{
-            id: Dim_id[d],
-            alias: Dim_id[d],
-            dataType: tableau.dataTypeEnum.string},
-      	{id: Dim_id_est[d],
-            alias: Dim_name_est[d],
-            dataType: tableau.dataTypeEnum.string},
-	{id: Dim_id_eng[d],
-            alias: Dim_name_eng[d],
-            dataType: tableau.dataTypeEnum.string}
-	];
-}
-
-        DIM_Schema[d]= {
-            id: Dim_id_est[d],
-            alias: Dim_name_est[d],
-            columns: DIMcols
-        };
-}
-	for (var d = 0; d < DimNo; d++) {
-	SchemaList.push(DIM_Schema[d]);
-	}
-
-// Define datatable
-	var cols_DataTable=[];
-	for (var d = 0; d < DimNo+DimCorr; d++) {
-	cols_DataTable.push({
-            id: Dim_id[d],
-            alias: Dim_id[d],
-            dataType: tableau.dataTypeEnum.string});
-	}
-	cols_DataTable.push({id: "obs",
-            alias: "observation",
-            dataType: tableau.dataTypeEnum.float});
-
-        var DataTableSchema = {
-            id: formObj.TableCode,
-            alias: "Datatable",
-            columns: cols_DataTable
-        };
-SchemaList.push(DataTableSchema);
-
-//Define joins
-var standardConnection ={"alias": "Joined data", "tables": [{
-        "id": formObj.TableCode,
-        "alias": "Datatable"
-    }], "joins":[]};
-	for (var d = 0; d < DimNo+DimCorr; d++) {
-	standardConnection.tables.push({
-        "id": Dim_id_est[d],
-        "alias": Dim_name_est[d]
-	});
-	standardConnection.joins.push({"left": {
-        "tableAlias": "Datatable",
-        "columnId": Dim_id[d]
-        }, "right": {"tableAlias": Dim_name_est[d],
-        "columnId": Dim_id[d]
-	},
-        "joinType": "inner"});
-	}
-schemaCallback(SchemaList, [standardConnection]);
 };
 
 
@@ -234,23 +221,24 @@ formObj = JSON.parse(tableau.connectionData);
 
 var r=0; //Counter of rows retrieved
 function processData(tableData, resp) {
-            // Iterate over the JSON object
-	for (var i = 0, len = resp.data.length; i < len; i++) {
+    var data=JSONstat(resp).toTable({ type: "arrobj", content: "id" });        
+    // Iterate over the JSON object
+	for (var i = 0, len = data.length; i < len; i++) {
 		r=r+1;
 		console.log ("Row", r, "of", CellsNo);
 		window.r=r;
 		var TablePush = {};
 		for (var d = 0; d < DimNo+DimCorr; d++) {
-		TablePush[Dim_id[d]] = resp.data[i].key[d];		
+		TablePush[Dim_id[d]] = data[i][DimCode[d]];	
 		}		
-	if (resp.data[i].values[0] !== "." && resp.data[i].values[0] !== ".." && resp.data[i].values[0] !== "...") {TablePush["obs"] = resp.data[i].values[0];}; //"." Data are confidential. ".." Data were not collected. "..." Data not (yet) available.
+	if (data[i].value !== "." && data[i].value !== ".." && data[i].value !== "...") {TablePush["obs"] = data[i].value;}; //"." Data are confidential. ".." Data were not collected. "..." Data not (yet) available.
 	tableData.push(TablePush);
 	}
 };
 
     function fetch(api_j, control, processCallback, finishedCallback) {//Define POST query
 	var Query=[];
-	for (var d = 0; d < DimNo; d++) {
+	for (var d = 0; d < DimNo+DimCorr; d++) {
 	if (d == Dim_max) {
 		Query.push({
       	"code": Dim_name_est[d],
@@ -275,7 +263,7 @@ function processData(tableData, resp) {
 }
 	}
 
-var PostQuery=('{"query":'+JSON.stringify(Query)+',"response":'+JSON.stringify({"format":"json"})+"}");
+var PostQuery=('{"query":'+JSON.stringify(Query)+',"response":'+JSON.stringify({"format":"json-stat2"})+"}");
 
     	$.ajax({type: "POST", url: Url, data: PostQuery, dataType: "json", success: function(resp) {
     		if (control ==1)
@@ -322,41 +310,42 @@ var PostQueryAll=('{"query":'+JSON.stringify(QueryAll)+',"response":'+JSON.strin
 
 //Define POST query for filtered data
 var PostQueryFilter=formObj.Filter;
-//if (PostQueryFilter.includes('"format": "json-stat2"')) {PostQueryFilter=PostQueryFilter.replace('"format": "json-stat2"', '"format": "json"')};
-
+var d_corr=0;
 if (table.tableInfo.id !== formObj.TableCode) {
-for (var d = 0; d < DimNo; d++) {
-if (table.tableInfo.id == Dim_id_est[d]) {
 
+    for (var d = 0; d < DimNo; d++) {
+        if (MetaData_est.variables[d].code != "ContentsCode") {
+    if (table.tableInfo.id == Dim_id_est[d_corr]) {
 	for (var i = 0, len = MetaData_est.variables[d].values.length; i < len; i++) {	 
 		Dim_value = MetaData_est.variables[d].values[i]; 
 		Dim_est = MetaData_est.variables[d].valueTexts[i];
 		Dim_eng = MetaData_eng.variables[d].valueTexts[i];
 if (formObj.language != "none") {		Dim_lang = formObj.language;	}	
 		var TablePush = {}; // {} will create an object
-	if (Dim_name_est[d] !== "Aasta" && Dim_name_est[d] !== "Vaatlusperiood") {
-		TablePush[Dim_id[d]] = Dim_value;
-		TablePush[Dim_id_est[d]]=Dim_est;
-		TablePush[Dim_id_eng[d]]=Dim_eng;
+	if (Dim_name_est[d_corr] !== "Aasta" && Dim_name_est[d_corr] !== "Vaatlusperiood" && Dim_name_est[d_corr] !== "TIME") {
+		TablePush[Dim_id[d_corr]] = Dim_value;
+		TablePush[Dim_id_est[d_corr]]=Dim_est;
+		TablePush[Dim_id_eng[d_corr]]=Dim_eng;
 if (formObj.language != "none") {
 		translate(Dim_est, formObj.language);
 		Dim_lang = translate_output;
-		TablePush[Dim_id_lang[d]]=Dim_lang;}
+		TablePush[Dim_id_lang[d_corr]]=Dim_lang;}
 		tableData.push(TablePush);
 	} else if (Dim_est.substring(0,4) >= formObj.StartYear) {
-		TablePush[Dim_id[d]] = Dim_value;
-		TablePush[Dim_id_est[d]]=Dim_est;
-		TablePush[Dim_id_eng[d]]=Dim_eng;
+		TablePush[Dim_id[d_corr]] = Dim_value;
+		TablePush[Dim_id_est[d_corr]]=Dim_est;
+		TablePush[Dim_id_eng[d_corr]]=Dim_eng;
 if (formObj.language != "none") {
 		translate(Dim_est, formObj.language);
 		Dim_lang = translate_output;		
-		TablePush[Dim_id_lang[d]]=Dim_lang;}
+		TablePush[Dim_id_lang[d_corr]]=Dim_lang;}
 		tableData.push(TablePush);
 	};
  	}
  table.appendRows(tableData);
  doneCallback();
 } 
+d_corr=d_corr+1;};
 }
 
  } else if (formObj.Filter !==null && formObj.Filter !=='') {//If filter is applyed query only filtered data.
