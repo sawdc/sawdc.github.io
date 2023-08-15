@@ -353,8 +353,8 @@ d_corr=d_corr+1;};
 $.ajax({type: "POST", url: Url, data: PostQueryFilter, dataType: "json",
  success: function(resp) {
 	processData(tableData, resp);	
- 	table.appendRows(tableData);
-//	chunkData(table, tableData);
+ 	//table.appendRows(tableData);
+	chunkData(table, tableData);
  	doneCallback();
 //	console.timeEnd("TimerAll");          
         },
