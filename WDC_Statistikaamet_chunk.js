@@ -22,7 +22,7 @@ var TableName,
 	Dim_name_eng=[],
 	Dim_name_lang=[],
     DimCode=[];
-const MaxCells = 100000; //Max no of cells limit 1 000 000 per query. For better performance smaller amounts could be retrieved.
+const MaxCells = 1000000; //Max no of cells limit 1 000 000 per query. For better performance smaller amounts could be retrieved.
 
 function translate(input_text, lang) {function callback_translate(response) {
 		translate_output=response.result;};
@@ -368,8 +368,8 @@ $.ajax({type: "POST", url: Url, data: PostQueryFilter, dataType: "json",
 $.ajax({type: "POST", url: Url, data: PostQueryAll, dataType: "json",
  success: function(resp) {
 	processData(tableData, resp);	
- 	table.appendRows(tableData);
-//	chunkData(table, tableData);
+ //	table.appendRows(tableData);
+	chunkData(table, tableData);
  	doneCallback();
 //	console.timeEnd("TimerAll");          
         },
