@@ -11,15 +11,16 @@ import { TableauViz, TableauEventType, PrintScaling, PrintPageSize, PrintOrienta
     tableauViz.addEventListener(TableauEventType.FirstInteractive, (e) => {
 
         document.getElementById('export-pdf').onclick = async () => {
-          const publishedSheetsInfo = tableauViz.workbook.publishedSheetsInfo;
-          const selectedWorkbookSheetsForExport = Array.from(publishedSheetsInfo, (publishedSheetInfo) => publishedSheetInfo.name);
+          const activeSheet = tableauViz.workbook.activeSheet;
+          const worksheets = activeSheet.worksheets;
+          const selectedWorksheetForExport = worksheets[1];
           const exportPDFOptions = {
             scaling: PrintScaling.AtMost1PageWide,
             pageSize: PrintPageSize.A4,
             orientation: PrintOrientation.Portrait,
           };
-          tableauViz.exportPDFAsync(selectedWorkbookSheetsForExport, exportPDFOptions).then(() => {
-            console.log(`Workbook: ${selectedWorkbookSheetsForExport.toString()}`);
+          tableauViz.exportPDFAsync(selectedWorksheetForExport, exportPDFOptions).then(() => {
+            console.log(`Workbook: ${selectedWorksheetForExport.toString()}`);
             console.log('Options:', exportPDFOptions);
           });
         };
