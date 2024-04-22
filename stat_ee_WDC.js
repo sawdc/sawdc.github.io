@@ -24,7 +24,7 @@ var TableName,
 	Dim_max_value="",
 	Dim_name_est=[],
 	Dim_name_eng=[];
-const MaxCells = 500000; //Max no of cells limit 1 000 000 per query. For better performance smaller amounts could be retrieved.
+const MaxCells = 700000; //Max no of cells limit 1 000 000 per query. For better performance smaller amounts could be retrieved.
 
 
 function callback_est(response) {
