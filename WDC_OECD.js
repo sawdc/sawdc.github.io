@@ -34,11 +34,11 @@ var Url = formObj.url;
 	
 fetch(Url)
   .then(response => response.json())
-  .then(data => {OECDData=data;
-			TableName = formObj.TableCode+": "+data.data.structures[0].name;
+  .then(data => {OECDData=data.data;
+			TableName = formObj.TableCode+": "+OECDData.structures[0].name;
 		tableau.connectionName = TableName;
-		Metadata=data.data.structures[0].dimensions.observation;
-		Data=JSONstat(data.data.dataSets[0].observations);
+		Metadata=OECDData.structures[0].dimensions.observation;
+		Data=JSONstat(OECDData.dataSets[0].observations);
 		DimNo=Metadata.length;
 		for (var i = 0; i < DimNo; i++) {
 		Dim_id[i]="DIM"+i+"_id";
