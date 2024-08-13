@@ -35,9 +35,9 @@ var Url = formObj.url;
 fetch(Url)
   .then(response => response.json())
   .then(data => {OECDData=data;
-			TableName = formObj.TableCode+": "+data.structure.name;
+			TableName = formObj.TableCode+": "+data.structures.name;
 		tableau.connectionName = TableName;
-		Metadata=data.structure.dimensions.observation;
+		Metadata=data.structures.dimensions.observation;
 		Data=JSONstat(data.dataSets[0].observations);
 		DimNo=Metadata.length;
 		for (var i = 0; i < DimNo; i++) {
